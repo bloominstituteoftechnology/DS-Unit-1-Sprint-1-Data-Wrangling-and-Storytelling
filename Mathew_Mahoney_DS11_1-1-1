@@ -1,0 +1,852 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Mathew Mahoney - DS11 -Sprint 1",
+      "provenance": [],
+      "collapsed_sections": [],
+      "toc_visible": true,
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/mathewmahoney/DS-Unit-1-Sprint-1-Data-Wrangling-and-Storytelling/blob/master/Mathew_Mahoney_DS11_1-1-1\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "colab_type": "text",
+        "id": "MSnsTgZLKO72"
+      },
+      "source": [
+        "# Practice Loading and Exploring Datasets\n",
+        "\n",
+        "This assignment is purposely open-ended. You will be asked to load datasets from the [UC-Irvine Machine Learning Repository](https://archive.ics.uci.edu/ml/index.php). \n",
+        "\n",
+        "Even though you maybe using different datasets than your fellow classmates, try and be supportive and assist each other in the challenges that you are facing. You will only deepend your understanding of these topics as you work to assist one another. Many popular UCI datasets face similar data loading challenges.\n",
+        "\n",
+        "Remember that the UCI datasets do not necessarily have a file type of `.csv` so it's important that you learn as much as you can about the dataset before you try and load it. See if you can look at the raw text of the file either locally or using the `!curl` shell command -or in some other way before you try and read it in as a dataframe. This will help you catch what would otherwise be unforseen problems.\n",
+        "\n",
+        "Feel free to embellish this notebook with additional markdown cells,code cells, comments, graphs, etc. Whatever you think helps adequately address the questions."
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "156P6ndeKojO",
+        "colab_type": "text"
+      },
+      "source": [
+        "## 1) Load a dataset from UCI (via its URL)\n",
+        "\n",
+        "Please navigate to the home page and choose a dataset (other than the Adult dataset) from the \"Most Popular\" section on the right-hand side of the home page. Load the dataset via its URL and check the following (show your work):\n",
+        "\n",
+        "- Are the headers showing up properly?\n",
+        "- Look at the first 5 and the last 5 rows, do they seem to be in order?\n",
+        "- Does the dataset have the correct number of rows and columns as described in the UCI page? \n",
+        " - Remember, that UCI does not count the y variable (column of values that we might want to predict via a machine learning model) as an \"attribute\" but rather as a \"class attribute\" so you may end up seeing a number of columns that is one greater than the number listed on the UCI website.\n",
+        "- Does UCI list this dataset as having missing values? Check for missing values and see if your analysis corroborates what UCI reports?\n",
+        "- if `NaN` values or other missing value indicators are not being detected by `df.isnull().sum()` find a way to replace whatever is indicating the missing values with `np.NaN`.\n",
+        "- Use the .describe() function in order to see the summary statistics of both the numeric and non-numeric columns. "
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "NJdISe69ZT7E",
+        "colab_type": "code",
+        "outputId": "0c3d132e-bc91-475f-b3e1-0290db87148f",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 841
+        }
+      },
+      "source": [
+        "# TODO your work here!\n",
+        "# And note you should write comments, descriptions, and add new\n",
+        "# code and text blocks as needed\n",
+        "\n",
+        "# load pandas as pd\n",
+        "import pandas as pd\n",
+        "\n",
+        "#load forrest fire data set via URL\n",
+        "df = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv')\n",
+        "df.info()\n",
+        "#check the first 5 rows and last 5 rows for any problems or irregularities\n",
+        "print(df.head(),'\\n')\n",
+        "\n",
+        "print(df.tail(), '\\n')\n",
+        "\n",
+        "#check the total records and make sure the number is correct\n",
+        "df.count()\n",
+        "\n",
+        "#check numeric and non-numeric column statistics\n",
+        "df.describe()\n"
+      ],
+      "execution_count": 98,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "<class 'pandas.core.frame.DataFrame'>\n",
+            "RangeIndex: 517 entries, 0 to 516\n",
+            "Data columns (total 13 columns):\n",
+            "X        517 non-null int64\n",
+            "Y        517 non-null int64\n",
+            "month    517 non-null object\n",
+            "day      517 non-null object\n",
+            "FFMC     517 non-null float64\n",
+            "DMC      517 non-null float64\n",
+            "DC       517 non-null float64\n",
+            "ISI      517 non-null float64\n",
+            "temp     517 non-null float64\n",
+            "RH       517 non-null int64\n",
+            "wind     517 non-null float64\n",
+            "rain     517 non-null float64\n",
+            "area     517 non-null float64\n",
+            "dtypes: float64(8), int64(3), object(2)\n",
+            "memory usage: 52.6+ KB\n",
+            "   X  Y month  day  FFMC   DMC     DC  ISI  temp  RH  wind  rain  area\n",
+            "0  7  5   mar  fri  86.2  26.2   94.3  5.1   8.2  51   6.7   0.0   0.0\n",
+            "1  7  4   oct  tue  90.6  35.4  669.1  6.7  18.0  33   0.9   0.0   0.0\n",
+            "2  7  4   oct  sat  90.6  43.7  686.9  6.7  14.6  33   1.3   0.0   0.0\n",
+            "3  8  6   mar  fri  91.7  33.3   77.5  9.0   8.3  97   4.0   0.2   0.0\n",
+            "4  8  6   mar  sun  89.3  51.3  102.2  9.6  11.4  99   1.8   0.0   0.0 \n",
+            "\n",
+            "     X  Y month  day  FFMC    DMC     DC   ISI  temp  RH  wind  rain   area\n",
+            "512  4  3   aug  sun  81.6   56.7  665.6   1.9  27.8  32   2.7   0.0   6.44\n",
+            "513  2  4   aug  sun  81.6   56.7  665.6   1.9  21.9  71   5.8   0.0  54.29\n",
+            "514  7  4   aug  sun  81.6   56.7  665.6   1.9  21.2  70   6.7   0.0  11.16\n",
+            "515  1  4   aug  sat  94.4  146.0  614.7  11.3  25.6  42   4.0   0.0   0.00\n",
+            "516  6  3   nov  tue  79.5    3.0  106.7   1.1  11.8  31   4.5   0.0   0.00 \n",
+            "\n"
+          ],
+          "name": "stdout"
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>X</th>\n",
+              "      <th>Y</th>\n",
+              "      <th>FFMC</th>\n",
+              "      <th>DMC</th>\n",
+              "      <th>DC</th>\n",
+              "      <th>ISI</th>\n",
+              "      <th>temp</th>\n",
+              "      <th>RH</th>\n",
+              "      <th>wind</th>\n",
+              "      <th>rain</th>\n",
+              "      <th>area</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>count</th>\n",
+              "      <td>517.000000</td>\n",
+              "      <td>517.000000</td>\n",
+              "      <td>517.000000</td>\n",
+              "      <td>517.000000</td>\n",
+              "      <td>517.000000</td>\n",
+              "      <td>517.000000</td>\n",
+              "      <td>517.000000</td>\n",
+              "      <td>517.000000</td>\n",
+              "      <td>517.000000</td>\n",
+              "      <td>517.000000</td>\n",
+              "      <td>517.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>mean</th>\n",
+              "      <td>4.669246</td>\n",
+              "      <td>4.299807</td>\n",
+              "      <td>90.644681</td>\n",
+              "      <td>110.872340</td>\n",
+              "      <td>547.940039</td>\n",
+              "      <td>9.021663</td>\n",
+              "      <td>18.889168</td>\n",
+              "      <td>44.288201</td>\n",
+              "      <td>4.017602</td>\n",
+              "      <td>0.021663</td>\n",
+              "      <td>12.847292</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>std</th>\n",
+              "      <td>2.313778</td>\n",
+              "      <td>1.229900</td>\n",
+              "      <td>5.520111</td>\n",
+              "      <td>64.046482</td>\n",
+              "      <td>248.066192</td>\n",
+              "      <td>4.559477</td>\n",
+              "      <td>5.806625</td>\n",
+              "      <td>16.317469</td>\n",
+              "      <td>1.791653</td>\n",
+              "      <td>0.295959</td>\n",
+              "      <td>63.655818</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>min</th>\n",
+              "      <td>1.000000</td>\n",
+              "      <td>2.000000</td>\n",
+              "      <td>18.700000</td>\n",
+              "      <td>1.100000</td>\n",
+              "      <td>7.900000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>2.200000</td>\n",
+              "      <td>15.000000</td>\n",
+              "      <td>0.400000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>25%</th>\n",
+              "      <td>3.000000</td>\n",
+              "      <td>4.000000</td>\n",
+              "      <td>90.200000</td>\n",
+              "      <td>68.600000</td>\n",
+              "      <td>437.700000</td>\n",
+              "      <td>6.500000</td>\n",
+              "      <td>15.500000</td>\n",
+              "      <td>33.000000</td>\n",
+              "      <td>2.700000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>50%</th>\n",
+              "      <td>4.000000</td>\n",
+              "      <td>4.000000</td>\n",
+              "      <td>91.600000</td>\n",
+              "      <td>108.300000</td>\n",
+              "      <td>664.200000</td>\n",
+              "      <td>8.400000</td>\n",
+              "      <td>19.300000</td>\n",
+              "      <td>42.000000</td>\n",
+              "      <td>4.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.520000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>75%</th>\n",
+              "      <td>7.000000</td>\n",
+              "      <td>5.000000</td>\n",
+              "      <td>92.900000</td>\n",
+              "      <td>142.400000</td>\n",
+              "      <td>713.900000</td>\n",
+              "      <td>10.800000</td>\n",
+              "      <td>22.800000</td>\n",
+              "      <td>53.000000</td>\n",
+              "      <td>4.900000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>6.570000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>max</th>\n",
+              "      <td>9.000000</td>\n",
+              "      <td>9.000000</td>\n",
+              "      <td>96.200000</td>\n",
+              "      <td>291.300000</td>\n",
+              "      <td>860.600000</td>\n",
+              "      <td>56.100000</td>\n",
+              "      <td>33.300000</td>\n",
+              "      <td>100.000000</td>\n",
+              "      <td>9.400000</td>\n",
+              "      <td>6.400000</td>\n",
+              "      <td>1090.840000</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                X           Y        FFMC  ...        wind        rain         area\n",
+              "count  517.000000  517.000000  517.000000  ...  517.000000  517.000000   517.000000\n",
+              "mean     4.669246    4.299807   90.644681  ...    4.017602    0.021663    12.847292\n",
+              "std      2.313778    1.229900    5.520111  ...    1.791653    0.295959    63.655818\n",
+              "min      1.000000    2.000000   18.700000  ...    0.400000    0.000000     0.000000\n",
+              "25%      3.000000    4.000000   90.200000  ...    2.700000    0.000000     0.000000\n",
+              "50%      4.000000    4.000000   91.600000  ...    4.000000    0.000000     0.520000\n",
+              "75%      7.000000    5.000000   92.900000  ...    4.900000    0.000000     6.570000\n",
+              "max      9.000000    9.000000   96.200000  ...    9.400000    6.400000  1090.840000\n",
+              "\n",
+              "[8 rows x 11 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 98
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "JPSlyE01giFp",
+        "colab_type": "code",
+        "outputId": "fdc78132-8351-457a-9395-ad262eb35710",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 204
+        }
+      },
+      "source": [
+        "df.tail()"
+      ],
+      "execution_count": 93,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>X</th>\n",
+              "      <th>Y</th>\n",
+              "      <th>month</th>\n",
+              "      <th>day</th>\n",
+              "      <th>FFMC</th>\n",
+              "      <th>DMC</th>\n",
+              "      <th>DC</th>\n",
+              "      <th>ISI</th>\n",
+              "      <th>temp</th>\n",
+              "      <th>RH</th>\n",
+              "      <th>wind</th>\n",
+              "      <th>rain</th>\n",
+              "      <th>area</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>512</th>\n",
+              "      <td>4</td>\n",
+              "      <td>3</td>\n",
+              "      <td>aug</td>\n",
+              "      <td>sun</td>\n",
+              "      <td>81.6</td>\n",
+              "      <td>56.7</td>\n",
+              "      <td>665.6</td>\n",
+              "      <td>1.9</td>\n",
+              "      <td>27.8</td>\n",
+              "      <td>32</td>\n",
+              "      <td>2.7</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>6.44</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>513</th>\n",
+              "      <td>2</td>\n",
+              "      <td>4</td>\n",
+              "      <td>aug</td>\n",
+              "      <td>sun</td>\n",
+              "      <td>81.6</td>\n",
+              "      <td>56.7</td>\n",
+              "      <td>665.6</td>\n",
+              "      <td>1.9</td>\n",
+              "      <td>21.9</td>\n",
+              "      <td>71</td>\n",
+              "      <td>5.8</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>54.29</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>514</th>\n",
+              "      <td>7</td>\n",
+              "      <td>4</td>\n",
+              "      <td>aug</td>\n",
+              "      <td>sun</td>\n",
+              "      <td>81.6</td>\n",
+              "      <td>56.7</td>\n",
+              "      <td>665.6</td>\n",
+              "      <td>1.9</td>\n",
+              "      <td>21.2</td>\n",
+              "      <td>70</td>\n",
+              "      <td>6.7</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>11.16</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>515</th>\n",
+              "      <td>1</td>\n",
+              "      <td>4</td>\n",
+              "      <td>aug</td>\n",
+              "      <td>sat</td>\n",
+              "      <td>94.4</td>\n",
+              "      <td>146.0</td>\n",
+              "      <td>614.7</td>\n",
+              "      <td>11.3</td>\n",
+              "      <td>25.6</td>\n",
+              "      <td>42</td>\n",
+              "      <td>4.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.00</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>516</th>\n",
+              "      <td>6</td>\n",
+              "      <td>3</td>\n",
+              "      <td>nov</td>\n",
+              "      <td>tue</td>\n",
+              "      <td>79.5</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>106.7</td>\n",
+              "      <td>1.1</td>\n",
+              "      <td>11.8</td>\n",
+              "      <td>31</td>\n",
+              "      <td>4.5</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.00</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "     X  Y month  day  FFMC    DMC     DC   ISI  temp  RH  wind  rain   area\n",
+              "512  4  3   aug  sun  81.6   56.7  665.6   1.9  27.8  32   2.7   0.0   6.44\n",
+              "513  2  4   aug  sun  81.6   56.7  665.6   1.9  21.9  71   5.8   0.0  54.29\n",
+              "514  7  4   aug  sun  81.6   56.7  665.6   1.9  21.2  70   6.7   0.0  11.16\n",
+              "515  1  4   aug  sat  94.4  146.0  614.7  11.3  25.6  42   4.0   0.0   0.00\n",
+              "516  6  3   nov  tue  79.5    3.0  106.7   1.1  11.8  31   4.5   0.0   0.00"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 93
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "EOxalk5mgie1",
+        "colab_type": "code",
+        "outputId": "29b0fa49-9d61-47cc-fa1e-f9de195a4c76",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 255
+        }
+      },
+      "source": [
+        "#check for any nulls or missing entries\n",
+        "df.isnull().sum()"
+      ],
+      "execution_count": 94,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "X        0\n",
+              "Y        0\n",
+              "month    0\n",
+              "day      0\n",
+              "FFMC     0\n",
+              "DMC      0\n",
+              "DC       0\n",
+              "ISI      0\n",
+              "temp     0\n",
+              "RH       0\n",
+              "wind     0\n",
+              "rain     0\n",
+              "area     0\n",
+              "dtype: int64"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 94
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "-gFnZR6iLLPY",
+        "colab_type": "text"
+      },
+      "source": [
+        "## 2) Load a dataset from your local machine.\n",
+        "Choose a second dataset from the \"Popular Datasets\" listing on UCI, but this time download it to your local machine instead of reading it in via the URL. Upload the file to Google Colab using the files tab in the left-hand sidebar or by importing `files` from `google.colab` The following link will be a useful resource if you can't remember the syntax: <https://towardsdatascience.com/3-ways-to-load-csv-files-into-colab-7c14fcbdcb92>\n",
+        "\n",
+        "- Answer all of the same bullet point questions from part 1 again on this new dataset. \n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "qUmwX-ZoM9cq",
+        "colab_type": "code",
+        "outputId": "ddce773d-ea50-4db6-ea3f-02dcfc259873",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 153
+        }
+      },
+      "source": [
+        "# TODO your work here!\n",
+        "# And note you should write comments, descriptions, and add new\n",
+        "# code and text blocks as needed\n",
+        "#Colab GUI to upload files\n",
+        "\n",
+        "\n",
+        "path = \"/content/drive/My Drive/bank.csv\"\n",
+        "df = pd.read_csv(path)\n",
+        "# Dataset is now stored in a Pandas Dataframe\n",
+        "\n",
+        "\n",
+        "# Show each columns information and details of contents\n",
+        "print(df.info(),'\\n')\n",
+        "\n"
+      ],
+      "execution_count": 95,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "<class 'pandas.core.frame.DataFrame'>\n",
+            "RangeIndex: 4521 entries, 0 to 4520\n",
+            "Data columns (total 1 columns):\n",
+            "age job marital education default balance housing loan contact day month duration campaign pdays previous poutcome y    4521 non-null object\n",
+            "dtypes: object(1)\n",
+            "memory usage: 35.4+ KB\n",
+            "None \n",
+            "\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "sOcN6t4WGAS3",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "#correct the column headers per the dataset source description\n",
+        "\n"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "IZhNAWnGDvYy",
+        "colab_type": "code",
+        "outputId": "adce59ee-5952-488b-f142-c977bccf2026",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 411
+        }
+      },
+      "source": [
+        "#check the first 5 records for proper format of column headers\n",
+        "print(df.head(), '\\n')\n",
+        "\n",
+        "#and the bottom 5 records\n",
+        "print(df.tail(), '\\n')\n",
+        "\n",
+        "#check for any nulls or missing entries\n",
+        "df.isnull().sum()\n",
+        "\n",
+        "#show summary stats of numeric and non numeric columns\n",
+        "df.describe()"
+      ],
+      "execution_count": 96,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "  age job marital education default balance housing loan contact day month duration campaign pdays previous poutcome y\n",
+            "0  30 unemployed married primary no 1787 no no ce...                                                                  \n",
+            "1  33 services married secondary no 4789 yes yes ...                                                                  \n",
+            "2  35 management single tertiary no 1350 yes no c...                                                                  \n",
+            "3  30 management married tertiary no 1476 yes yes...                                                                  \n",
+            "4  59 blue-collar married secondary no 0 yes no u...                                                                   \n",
+            "\n",
+            "     age job marital education default balance housing loan contact day month duration campaign pdays previous poutcome y\n",
+            "4516  33 services married secondary no -333 yes no c...                                                                  \n",
+            "4517  57 self-employed married tertiary yes -3313 ye...                                                                  \n",
+            "4518  57 technician married secondary no 295 no no c...                                                                  \n",
+            "4519  28 blue-collar married secondary no 1137 no no...                                                                  \n",
+            "4520  44 entrepreneur single tertiary no 1136 yes ye...                                                                   \n",
+            "\n"
+          ],
+          "name": "stdout"
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>age job marital education default balance housing loan contact day month duration campaign pdays previous poutcome y</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>count</th>\n",
+              "      <td>4521</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>unique</th>\n",
+              "      <td>4521</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>top</th>\n",
+              "      <td>46 housemaid married primary no 19 yes no tele...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>freq</th>\n",
+              "      <td>1</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "       age job marital education default balance housing loan contact day month duration campaign pdays previous poutcome y\n",
+              "count                                                4521                                                                  \n",
+              "unique                                               4521                                                                  \n",
+              "top     46 housemaid married primary no 19 yes no tele...                                                                  \n",
+              "freq                                                    1                                                                  "
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 96
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "mq_aQjxlM-u5",
+        "colab_type": "text"
+      },
+      "source": [
+        "## 3) Make Crosstabs of the Categorical Variables\n",
+        "\n",
+        "Take whichever of the above datasets has more categorical variables and use crosstabs to tabulate the different instances of the categorical variables.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "9-n9-LTM-18p",
+        "colab_type": "code",
+        "outputId": "2bd279aa-aa62-451d-af3f-c66a03f8a168",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 698
+        }
+      },
+      "source": [
+        "#crosstabs shows tabulation of each instance of categorical variables per each columnw\n",
+        "\n",
+        "pd.crosstab(df['month'], df['temp'])"
+      ],
+      "execution_count": 97,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "KeyError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mKeyError\u001b[0m                                  Traceback (most recent call last)",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/pandas/core/indexes/base.py\u001b[0m in \u001b[0;36mget_loc\u001b[0;34m(self, key, method, tolerance)\u001b[0m\n\u001b[1;32m   2896\u001b[0m             \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 2897\u001b[0;31m                 \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_engine\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget_loc\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   2898\u001b[0m             \u001b[0;32mexcept\u001b[0m \u001b[0mKeyError\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32mpandas/_libs/index.pyx\u001b[0m in \u001b[0;36mpandas._libs.index.IndexEngine.get_loc\u001b[0;34m()\u001b[0m\n",
+            "\u001b[0;32mpandas/_libs/index.pyx\u001b[0m in \u001b[0;36mpandas._libs.index.IndexEngine.get_loc\u001b[0;34m()\u001b[0m\n",
+            "\u001b[0;32mpandas/_libs/hashtable_class_helper.pxi\u001b[0m in \u001b[0;36mpandas._libs.hashtable.PyObjectHashTable.get_item\u001b[0;34m()\u001b[0m\n",
+            "\u001b[0;32mpandas/_libs/hashtable_class_helper.pxi\u001b[0m in \u001b[0;36mpandas._libs.hashtable.PyObjectHashTable.get_item\u001b[0;34m()\u001b[0m\n",
+            "\u001b[0;31mKeyError\u001b[0m: 'month'",
+            "\nDuring handling of the above exception, another exception occurred:\n",
+            "\u001b[0;31mKeyError\u001b[0m                                  Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-97-848fe2178a1c>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 2\u001b[0;31m \u001b[0mpd\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcrosstab\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdf\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'month'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mdf\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'temp'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36m__getitem__\u001b[0;34m(self, key)\u001b[0m\n\u001b[1;32m   2993\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcolumns\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mnlevels\u001b[0m \u001b[0;34m>\u001b[0m \u001b[0;36m1\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2994\u001b[0m                 \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_getitem_multilevel\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 2995\u001b[0;31m             \u001b[0mindexer\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcolumns\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget_loc\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   2996\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0mis_integer\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mindexer\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2997\u001b[0m                 \u001b[0mindexer\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m[\u001b[0m\u001b[0mindexer\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/pandas/core/indexes/base.py\u001b[0m in \u001b[0;36mget_loc\u001b[0;34m(self, key, method, tolerance)\u001b[0m\n\u001b[1;32m   2897\u001b[0m                 \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_engine\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget_loc\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2898\u001b[0m             \u001b[0;32mexcept\u001b[0m \u001b[0mKeyError\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 2899\u001b[0;31m                 \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_engine\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget_loc\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_maybe_cast_indexer\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   2900\u001b[0m         \u001b[0mindexer\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget_indexer\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mmethod\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mmethod\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtolerance\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mtolerance\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2901\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mindexer\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mndim\u001b[0m \u001b[0;34m>\u001b[0m \u001b[0;36m1\u001b[0m \u001b[0;32mor\u001b[0m \u001b[0mindexer\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0msize\u001b[0m \u001b[0;34m>\u001b[0m \u001b[0;36m1\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32mpandas/_libs/index.pyx\u001b[0m in \u001b[0;36mpandas._libs.index.IndexEngine.get_loc\u001b[0;34m()\u001b[0m\n",
+            "\u001b[0;32mpandas/_libs/index.pyx\u001b[0m in \u001b[0;36mpandas._libs.index.IndexEngine.get_loc\u001b[0;34m()\u001b[0m\n",
+            "\u001b[0;32mpandas/_libs/hashtable_class_helper.pxi\u001b[0m in \u001b[0;36mpandas._libs.hashtable.PyObjectHashTable.get_item\u001b[0;34m()\u001b[0m\n",
+            "\u001b[0;32mpandas/_libs/hashtable_class_helper.pxi\u001b[0m in \u001b[0;36mpandas._libs.hashtable.PyObjectHashTable.get_item\u001b[0;34m()\u001b[0m\n",
+            "\u001b[0;31mKeyError\u001b[0m: 'month'"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "OJ4t2IAk-6Vg",
+        "colab_type": "text"
+      },
+      "source": [
+        "## 4) Explore the distributions of the variables of the dataset using:\n",
+        "- Histograms\n",
+        "- Scatterplots\n",
+        "- Density Plots"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "DhES5WmH_NFt",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "# Your Code Here"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "LXXTzpgp_N0q",
+        "colab_type": "text"
+      },
+      "source": [
+        "## 5) Create at least one visualization from a crosstab:\n",
+        "\n",
+        "Remember that a crosstabst a k5dataframe and can be manipulated in the same way by row index, column, index, or column/row/cell position.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "kBQKXHUa_VxM",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "# Your Code Here"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "MZCxTwKuReV9",
+        "colab_type": "text"
+      },
+      "source": [
+        "## Stretch Goals \n",
+        "\n",
+        "The following additional study tasks are optional, they are intended to give you an opportunity to stretch yourself beyond the main requirements of the assignment. You can pick and choose from the below, you do not need to complete them in any particular order.\n",
+        "\n",
+        "### - Practice Exploring other Datasets\n",
+        "\n",
+        "### -  Try using the Seaborn plotting library's \"Pairplot\" functionality in order to explore all of the possible histograms and scatterplots of your dataset all at once:\n",
+        "\n",
+        "[Seaborn Pairplot](https://seaborn.pydata.org/generated/seaborn.pairplot.html)\n",
+        "\n",
+        "### - Turn some of the continuous variables into categorical variables by binning the values using:\n",
+        "- [pd.cut()](https://pandas.pydata.org/pandas-docs/version/0.23.4/generated/pandas.cut.html)\n",
+        "- [pd.qcut()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.qcut.html)\n",
+        "- <https://stackoverflow.com/questions/30211923/what-is-the-difference-between-pandas-qcut-and-pandas-cut>\n",
+        "\n",
+        "And then use crosstabs to compare/visualize these binned variables against the other variables.\n",
+        "\n",
+        "\n",
+        "### - Other types and sources of data\n",
+        "Not all data comes in a nice single file - for example, image classification involves handling lots of image files. You still will probably want labels for them, so you may have tabular data in addition to the image blobs - and the images may be reduced in resolution and even fit in a regular csv as a bunch of numbers.\n",
+        "\n",
+        "If you're interested in natural language processing and analyzing text, that is another example where, while it can be put in a csv, you may end up loading much larger raw data and generating features that can then be thought of in a more standard tabular fashion.\n",
+        "\n",
+        "Overall you will in the course of learning data science deal with loading data in a variety of ways. Another common way to get data is from a database - most modern applications are backed by one or more databases, which you can query to get data to analyze. We'll cover this more in our data engineering unit.\n",
+        "\n",
+        "How does data get in the database? Most applications generate logs - text files with lots and lots of records of each use of the application. Databases are often populated based on these files, but in some situations you may directly analyze log files. The usual way to do this is with command line (Unix) tools - command lines are intimidating, so don't expect to learn them all at once, but depending on your interests it can be useful to practice.\n",
+        "\n",
+        "One last major source of data is APIs: https://github.com/toddmotto/public-apis\n",
+        "\n",
+        "API stands for Application Programming Interface, and while originally meant e.g. the way an application interfaced with the GUI or other aspects of an operating system, now it largely refers to online services that let you query and retrieve data. You can essentially think of most of them as \"somebody else's database\" - you have (usually limited) access.\n",
+        "\n",
+        "*Stretch goal* - research one of the above extended forms of data/data loading. See if you can get a basic example working in a notebook. Image, text, or (public) APIs are probably more tractable - databases are interesting, but there aren't many publicly accessible and they require a great deal of setup."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "f4QP6--JBXNK",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        ""
+      ],
+      "execution_count": 0,
+      "outputs": []
+    }
+  ]
+}
