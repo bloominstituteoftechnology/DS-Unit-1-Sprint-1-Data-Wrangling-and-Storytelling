@@ -1,0 +1,615 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.7.3"
+    },
+    "colab": {
+      "name": "Julio_E_LS_DS_121_Statistics_Probability_Assignment.ipynb",
+      "provenance": [],
+      "collapsed_sections": [],
+      "include_colab_link": true
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/julioe27/DS-Unit-1-Sprint-1-Data-Wrangling-and-Storytelling/blob/master/Julio_E_DS-Unit-1-Sprint-2-Statistics/module1\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Sa5KWMO1ngPN",
+        "colab_type": "text"
+      },
+      "source": [
+        "<img align=\"left\" src=\"https://lever-client-logos.s3.amazonaws.com/864372b1-534c-480e-acd5-9711f850815c-1524247202159.png\" width=200>\n",
+        "<br></br>\n",
+        "<br></br>\n",
+        "\n",
+        "## *Data Science Unit 1 Sprint 2 Assignment 1*\n",
+        "\n",
+        "# Apply the t-test to real data\n",
+        "\n",
+        "Your assignment is to determine which issues have \"statistically significant\" differences between political parties in this [1980s congressional voting data](https://archive.ics.uci.edu/ml/datasets/Congressional+Voting+Records). The data consists of 435 instances (one for each congressperson), a class (democrat or republican), and 16 binary attributes (yes or no for voting for or against certain issues). Be aware - there are missing values!\n",
+        "\n",
+        "Your goals:\n",
+        "\n",
+        "1. Load and clean the data (or determine the best method to drop observations when running tests)\n",
+        "2. Using hypothesis testing, find an issue that democrats support more than republicans with p < 0.01\n",
+        "3. Using hypothesis testing, find an issue that republicans support more than democrats with p < 0.01\n",
+        "4. Using hypothesis testing, find an issue where the difference between republicans and democrats has p > 0.1 (i.e. there may not be much of a difference)\n",
+        "\n",
+        "Note that this data will involve *2 sample* t-tests, because you're comparing averages across two groups (republicans and democrats) rather than a single group against a null hypothesis.\n",
+        "\n",
+        "Stretch goals:\n",
+        "\n",
+        "1. Refactor your code into functions so it's easy to rerun with arbitrary variables\n",
+        "2. Apply hypothesis testing to your personal project data (for the purposes of this notebook you can type a summary of the hypothesis you formed and tested)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "ZKwspo2CngPP",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "### YOUR CODE STARTS HERE\n",
+        "from scipy.stats import ttest_ind,ttest_ind_from_stats,ttest_rel\n",
+        "import pandas as pd\n",
+        "import numpy as np"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "kHOgRU2mxOug",
+        "colab_type": "code",
+        "outputId": "a6fbbcb8-a544-40b5-a5b2-91bd8d5791ab",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 204
+        }
+      },
+      "source": [
+        "!wget https://archive.ics.uci.edu/ml/machine-learning-databases/voting-records/house-votes-84.data"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "--2019-11-14 03:19:31--  https://archive.ics.uci.edu/ml/machine-learning-databases/voting-records/house-votes-84.data\n",
+            "Resolving archive.ics.uci.edu (archive.ics.uci.edu)... 128.195.10.252\n",
+            "Connecting to archive.ics.uci.edu (archive.ics.uci.edu)|128.195.10.252|:443... connected.\n",
+            "HTTP request sent, awaiting response... 200 OK\n",
+            "Length: 18171 (18K) [application/x-httpd-php]\n",
+            "Saving to: ‘house-votes-84.data.2’\n",
+            "\n",
+            "house-votes-84.data 100%[===================>]  17.75K  --.-KB/s    in 0.06s   \n",
+            "\n",
+            "2019-11-14 03:19:31 (285 KB/s) - ‘house-votes-84.data.2’ saved [18171/18171]\n",
+            "\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "HMH5LxGxxRCT",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "column_headers = ['party','handicapped-infacts','water-project',\n",
+        "                 'budget','physician-fee-freeze','el-salvador-aid',\n",
+        "                 'religious-groups','anti-satellite-ban',\n",
+        "                 'aid-to-contras','mx-missle','immigration',\n",
+        "                 'synfuels','education','right-to-sue','crime','duty-free',\n",
+        "                 'south-africa']\n",
+        "df = pd.read_csv('house-votes-84.data',\n",
+        "                header=None,\n",
+        "                names=column_headers,\n",
+        "                na_values='?')"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "ixk-hauoyyr6",
+        "colab_type": "code",
+        "outputId": "0713dd31-29d1-4a91-fb1d-e5c896454a44",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 221
+        }
+      },
+      "source": [
+        "df = df.replace({'y':1,'n':0})\n",
+        "df.head()"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>party</th>\n",
+              "      <th>handicapped-infacts</th>\n",
+              "      <th>water-project</th>\n",
+              "      <th>budget</th>\n",
+              "      <th>physician-fee-freeze</th>\n",
+              "      <th>el-salvador-aid</th>\n",
+              "      <th>religious-groups</th>\n",
+              "      <th>anti-satellite-ban</th>\n",
+              "      <th>aid-to-contras</th>\n",
+              "      <th>mx-missle</th>\n",
+              "      <th>immigration</th>\n",
+              "      <th>synfuels</th>\n",
+              "      <th>education</th>\n",
+              "      <th>right-to-sue</th>\n",
+              "      <th>crime</th>\n",
+              "      <th>duty-free</th>\n",
+              "      <th>south-africa</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>republican</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>republican</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>democrat</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>democrat</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>democrat</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "      <td>1.0</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "        party  handicapped-infacts  ...  duty-free  south-africa\n",
+              "0  republican                  0.0  ...        0.0           1.0\n",
+              "1  republican                  0.0  ...        0.0           NaN\n",
+              "2    democrat                  NaN  ...        0.0           0.0\n",
+              "3    democrat                  0.0  ...        0.0           1.0\n",
+              "4    democrat                  1.0  ...        1.0           1.0\n",
+              "\n",
+              "[5 rows x 17 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 54
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "i4cO-SZw0cXk",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "rep = df[df['party']=='republican']\n",
+        "dem = df[df['party']=='democrat']"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "-P1qDiXP2jBi",
+        "colab_type": "code",
+        "outputId": "194f808f-6c29-42e1-8f56-ff0ac5fc2d72",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        }
+      },
+      "source": [
+        "rep['el-salvador-aid'].mean()"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0.9515151515151515"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 56
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "xiF-zzbw3LGV",
+        "colab_type": "code",
+        "outputId": "5de9894b-beb0-4ed6-abac-1a7bc0306ea6",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        }
+      },
+      "source": [
+        "dem['el-salvador-aid'].mean()"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0.21568627450980393"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 57
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "aj8h1v0H3QCX",
+        "colab_type": "code",
+        "outputId": "ad85c5a0-b653-4e97-d5d3-b64d5b63d444",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        }
+      },
+      "source": [
+        "ttest_ind(dem['el-salvador-aid'],rep['el-salvador-aid'],nan_policy='omit').pvalue/2 < .01\n",
+        "# Using hypothesis testing, find an issue that republicans support more than DEMOCRATS with p < 0.01"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "True"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 58
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "gtU1HkeK4uOs",
+        "colab_type": "code",
+        "outputId": "c71d1d9b-f5e3-4ebe-d7bc-089cecfdc429",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        }
+      },
+      "source": [
+        "rep['south-africa'].mean()"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0.6575342465753424"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 59
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "_zibFhHX5uTK",
+        "colab_type": "code",
+        "outputId": "1d472d6c-a469-47d3-e4cf-693071b287ba",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        }
+      },
+      "source": [
+        "dem['south-africa'].mean()"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0.9351351351351351"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 60
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "UAa_lP276Eiq",
+        "colab_type": "code",
+        "outputId": "23a0b895-3b61-458b-8b22-62778f1ff603",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        }
+      },
+      "source": [
+        "ttest_ind(rep['south-africa'],dem['south-africa'],nan_policy='omit').pvalue/2 < .01\n",
+        "#Using hypothesis testing, find an issue that democrats support more than republicans with p < 0.01"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "True"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 61
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "02iFtERT6mX8",
+        "colab_type": "code",
+        "outputId": "1de36b4e-76ca-41cf-a43f-30b38e6d5d8d",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        }
+      },
+      "source": [
+        "rep['water-project'].mean()"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0.5067567567567568"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 76
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "y16k2gVR6x6m",
+        "colab_type": "code",
+        "outputId": "2c4311d9-a075-4716-98f7-97cef42595f9",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        }
+      },
+      "source": [
+        "dem['water-project'].mean()"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0.502092050209205"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 75
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "TmOsC7Ei7gML",
+        "colab_type": "code",
+        "outputId": "466b30fb-df29-44d2-d50b-79808dff6f53",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        }
+      },
+      "source": [
+        "ttest_ind(dem['water-project'],rep['water-project'],nan_policy='omit').pvalue/2 < .01\n",
+        "# Using hypothesis testing, find an issue where the difference between\n",
+        "# republicans and democrats has p > 0.1 (i.e. there may not be much of a difference)"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "False"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 78
+        }
+      ]
+    }
+  ]
+}
