@@ -5,5 +5,5 @@
 
 - Module 1: Complete
 - Module 2: Complete
-- Module 3
+- Module 3: Complete
 - Module 4
