@@ -63,8 +63,8 @@
         " - This means that if you haven't followed along already, type out the things that we did in class. Forcing your fingers to hit each key will help you internalize the syntax of what we're doing. Make sure you understand each line of code that you're writing, google things that you don't fully understand.\n",
         " - [Lambda Learning Method for DS - By Ryan Herr](https://docs.google.com/document/d/1ubOw9B3Hfip27hF2ZFnW3a3z9xAgrUDRReOEo-FHCVs/edit?usp=sharing)\n",
         "- ~Convert the `term` column from string to integer.~\n",
-        "- Make a column named `loan_status_is_great`. It should contain the integer 1 if `loan_status` is \"Current\" or \"Fully Paid.\" Else it should contain the integer 0.\n",
-        "- Make `last_pymnt_d_month` and `last_pymnt_d_year` columns."
+        "- ~Make a column named `loan_status_is_great`. It should contain the integer 1 if `loan_status` is \"Current\" or \"Fully Paid.\" Else it should contain the integer 0.~\n",
+        "- ~Make `last_pymnt_d_month` and `last_pymnt_d_year` columns.~"
       ]
     },
     {
@@ -96,11 +96,11 @@
       "metadata": {
         "id": "zDtUPxFkQVc_",
         "colab_type": "code",
-        "outputId": "3f2f0dd6-3ca3-4e56-b161-d8460ad03da0",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 202
-        }
+        },
+        "outputId": "2e7fd706-f755-4e77-d2d8-af74f2d251e0"
       },
       "source": [
         "! wget https://resources.lendingclub.com/LoanStats_2018Q4.csv.zip"
@@ -110,16 +110,16 @@
         {
           "output_type": "stream",
           "text": [
-            "--2020-01-20 01:50:33--  https://resources.lendingclub.com/LoanStats_2018Q4.csv.zip\n",
+            "--2020-01-20 04:40:21--  https://resources.lendingclub.com/LoanStats_2018Q4.csv.zip\n",
             "Resolving resources.lendingclub.com (resources.lendingclub.com)... 64.48.1.20\n",
             "Connecting to resources.lendingclub.com (resources.lendingclub.com)|64.48.1.20|:443... connected.\n",
             "HTTP request sent, awaiting response... 200 OK\n",
             "Length: unspecified [application/zip]\n",
-            "Saving to: ‘LoanStats_2018Q4.csv.zip’\n",
+            "Saving to: ‘LoanStats_2018Q4.csv.zip.2’\n",
             "\n",
-            "LoanStats_2018Q4.cs     [                 <=>]  21.72M   838KB/s    in 27s     \n",
+            "LoanStats_2018Q4.cs     [                 <=>]  21.72M   858KB/s    in 26s     \n",
             "\n",
-            "2020-01-20 01:51:00 (830 KB/s) - ‘LoanStats_2018Q4.csv.zip’ saved [22776791]\n",
+            "2020-01-20 04:40:47 (852 KB/s) - ‘LoanStats_2018Q4.csv.zip.2’ saved [22776791]\n",
             "\n"
           ],
           "name": "stdout"
@@ -131,11 +131,11 @@
       "metadata": {
         "id": "lEExoDA8Jnod",
         "colab_type": "code",
-        "outputId": "ff8911cd-5722-4b22-8346-6442331fee77",
         "colab": {
           "base_uri": "https://localhost:8080/",
-          "height": 50
-        }
+          "height": 67
+        },
+        "outputId": "9a6844fb-966a-4cf7-c8b1-419039979903"
       },
       "source": [
         "! unzip LoanStats_2018Q4.csv.zip"
@@ -146,6 +146,7 @@
           "output_type": "stream",
           "text": [
             "Archive:  LoanStats_2018Q4.csv.zip\n",
+            "replace LoanStats_2018Q4.csv? [y]es, [n]o, [A]ll, [N]one, [r]ename: y\n",
             "  inflating: LoanStats_2018Q4.csv    \n"
           ],
           "name": "stdout"
@@ -157,11 +158,11 @@
       "metadata": {
         "id": "1LqHi7_OJxGH",
         "colab_type": "code",
-        "outputId": "6217a982-af2f-464c-9427-7bdf6fee092f",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 87
-        }
+        },
+        "outputId": "9e108ff6-31be-485e-eb1e-cc4ce48299b6"
       },
       "source": [
         "# Read in the csv file\n",
@@ -199,11 +200,11 @@
       "metadata": {
         "id": "mmYasgRmJxE8",
         "colab_type": "code",
-        "outputId": "bac434ea-320f-474d-d36f-65c199553e1d",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 299
-        }
+        },
+        "outputId": "d7bd95f5-949d-41c5-c99b-547ed250b7cb"
       },
       "source": [
         "# Check head\n",
@@ -1129,11 +1130,11 @@
       "metadata": {
         "id": "g9CIJ4vKJw_Z",
         "colab_type": "code",
-        "outputId": "750115ce-e70b-4732-ee94-96c1f38f7a6b",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 328
-        }
+        },
+        "outputId": "a9702ce0-e26a-4726-aeca-5a5b4f12b1fa"
       },
       "source": [
         "# Fix header problem - use skiprows parameter\n",
@@ -1697,11 +1698,11 @@
       "metadata": {
         "id": "H9I2MmXaJw80",
         "colab_type": "code",
-        "outputId": "fdcb099b-c1e4-495f-c21b-798e6cca4c2c",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 1000
-        }
+        },
+        "outputId": "05873048-03ff-44e3-dde4-b7e8fae23248"
       },
       "source": [
         "# finding NaN\n",
@@ -1892,11 +1893,11 @@
       "metadata": {
         "id": "_6e58IowJw2u",
         "colab_type": "code",
-        "outputId": "b4fe59cf-696a-4b72-b9f8-22bc4ffb4ba1",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 202
-        }
+        },
+        "outputId": "7dd54674-975f-42dc-e0a7-b33a0c023e6e"
       },
       "source": [
         "# Clean up the 'int_rate' column\n",
@@ -1952,11 +1953,11 @@
       "metadata": {
         "id": "n28idruRJwu7",
         "colab_type": "code",
-        "outputId": "2f90b758-9af2-4dd9-e519-bb74d7e6d517",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 328
-        }
+        },
+        "outputId": "7ea95e13-33e6-4ebc-88c2-e4374e7adf7b"
       },
       "source": [
         "# Improve all code with .apply and cast_strip function\n",
@@ -2553,11 +2554,11 @@
       "metadata": {
         "id": "K8fBfI1iJwon",
         "colab_type": "code",
-        "outputId": "5faad11f-4637-4629-944f-c7362de9ec68",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 118
-        }
+        },
+        "outputId": "6f8ac06c-e919-43a4-8be0-edb72b518a7c"
       },
       "source": [
         "# Check the head of 'term' column\n",
@@ -2590,11 +2591,11 @@
       "metadata": {
         "id": "8pjDClPPJwlY",
         "colab_type": "code",
-        "outputId": "df1ea500-cc4f-4df5-b87e-2b8ab9679cf1",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 118
-        }
+        },
+        "outputId": "3ac7399c-691e-40db-fa81-6fa94eb8a3af"
       },
       "source": [
         "# Change the name of the 'term' column\n",
@@ -2644,11 +2645,11 @@
       "metadata": {
         "id": "sHahoGw_X9wS",
         "colab_type": "code",
-        "outputId": "aac19dc6-77d5-4c52-848c-d50a27cb4278",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 34
-        }
+        },
+        "outputId": "cad56555-b675-4c1e-f78a-4651ae736bb6"
       },
       "source": [
         "# Check - does str_strip work?\n",
@@ -2675,11 +2676,11 @@
       "metadata": {
         "id": "eVgnLiqMYBxn",
         "colab_type": "code",
-        "outputId": "2b09dfc2-adfb-4148-d4ab-0052bfe4e7c1",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 34
-        }
+        },
+        "outputId": "3f172f82-64fc-4797-e82e-bb72a5c015f0"
       },
       "source": [
         "# Use str_strip on 'term_months' column, via .appened list\n",
@@ -2712,11 +2713,11 @@
       "metadata": {
         "id": "dq9CGDA5JwcL",
         "colab_type": "code",
-        "outputId": "d3c8a730-935f-4088-967d-6fca5d62bf50",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 118
-        }
+        },
+        "outputId": "ca8a73e2-0840-40ad-b11a-eed28b8c827a"
       },
       "source": [
         "# Improve all code with .apply and str_strip function\n",
@@ -2750,11 +2751,11 @@
       "metadata": {
         "id": "3K46hoZlJwZB",
         "colab_type": "code",
-        "outputId": "5d969636-d747-451c-c18e-720d7801d015",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 328
-        }
+        },
+        "outputId": "bd381f35-01b3-4882-b772-97de09504cce"
       },
       "source": [
         "# Check the head\n",
@@ -3330,34 +3331,20 @@
     {
       "cell_type": "code",
       "metadata": {
-        "id": "aXouDnxnGeUH",
-        "colab_type": "code",
-        "colab": {}
-      },
-      "source": [
-        "\n",
-        "# loans_df = loans_df.assign({'loan_status_is_great'= Series})"
-      ],
-      "execution_count": 0,
-      "outputs": []
-    },
-    {
-      "cell_type": "code",
-      "metadata": {
         "id": "YgLBHQHsGeMr",
         "colab_type": "code",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 151
         },
-        "outputId": "396b3200-d5f2-4478-a332-caadba149780"
+        "outputId": "ca2e334c-753c-48ab-e774-a5692ad8fd97"
       },
       "source": [
         "#Check for NaN and see what cell contains\n",
         "\n",
         "loans_df ['loan_status'].value_counts (dropna=False)"
       ],
-      "execution_count": 20,
+      "execution_count": 19,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -3376,7 +3363,7 @@
           "metadata": {
             "tags": []
           },
-          "execution_count": 20
+          "execution_count": 19
         }
       ]
     },
@@ -3388,6 +3375,8 @@
         "colab": {}
       },
       "source": [
+        "# For Loop to change 'loan_status' to numerical\n",
+        "\n",
         "status_list = []\n",
         "\n",
         "for cell in loans_df['loan_status']:\n",
@@ -3421,12 +3410,12 @@
           "base_uri": "https://localhost:8080/",
           "height": 328
         },
-        "outputId": "2768010b-ef82-410b-91ee-f1cd98df7550"
+        "outputId": "55c77c3c-8024-4b05-ad21-6156e9c03554"
       },
       "source": [
         "loans_df.head()"
       ],
-      "execution_count": 38,
+      "execution_count": 23,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -3973,7 +3962,7 @@
           "metadata": {
             "tags": []
           },
-          "execution_count": 38
+          "execution_count": 23
         }
       ]
     },
@@ -4011,12 +4000,12 @@
           "base_uri": "https://localhost:8080/",
           "height": 590
         },
-        "outputId": "9b7451ed-f9cf-43a7-e288-eee7d1b7dab4"
+        "outputId": "93a55484-b5f1-4963-df8c-77b91622b05a"
       },
       "source": [
         "loans_df.sort_values('last_pymnt_d_month')"
       ],
-      "execution_count": 43,
+      "execution_count": 26,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -5073,7 +5062,7 @@
           "metadata": {
             "tags": []
           },
-          "execution_count": 43
+          "execution_count": 26
         }
       ]
     },
@@ -5086,7 +5075,7 @@
           "base_uri": "https://localhost:8080/",
           "height": 606
         },
-        "outputId": "ecd034a1-cca1-4cfa-be74-4c0416c0cabf"
+        "outputId": "7d6c2c64-a574-4464-992d-a3c2a1fc45ee"
       },
       "source": [
         "# Adding second empty column\n",
@@ -5095,7 +5084,7 @@
         "\n",
         "loans_df.sort_values('last_pymnt_d_day')"
       ],
-      "execution_count": 45,
+      "execution_count": 27,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -6152,7 +6141,7 @@
           "metadata": {
             "tags": []
           },
-          "execution_count": 45
+          "execution_count": 27
         }
       ]
     },
@@ -6174,20 +6163,69 @@
     {
       "cell_type": "code",
       "metadata": {
+        "id": "RUBu_lUN6LpB",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 67
+        },
+        "outputId": "73594730-36c9-4553-adb7-5002ac548509"
+      },
+      "source": [
+        "# Check the NaN counts\n",
+        "\n",
+        "pd.isna(loans_df['revol_util']).value_counts(dropna=False)"
+      ],
+      "execution_count": 28,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "False    128241\n",
+              "True        156\n",
+              "Name: revol_util, dtype: int64"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 28
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "KPngr52l6Lnp",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "# Fill the NaN values with zeros\n",
+        "\n",
+        "loans_df['revol_util'] = loans_df['revol_util'].fillna(0)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
         "id": "yMr_DMUkd15T",
         "colab_type": "code",
-        "outputId": "bb3fed60-6912-4ce5-def9-a52531288c81",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 118
-        }
+        },
+        "outputId": "e42f3711-f75c-4a2a-d52a-b274b8cef2bb"
       },
       "source": [
         "# Check the head of 'revol_util' column\n",
         "\n",
         "loans_df['revol_util'].head()"
       ],
-      "execution_count": 46,
+      "execution_count": 32,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -6204,7 +6242,40 @@
           "metadata": {
             "tags": []
           },
-          "execution_count": 46
+          "execution_count": 32
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "r46O4MKJ6Lhe",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 50
+        },
+        "outputId": "20a267ed-0afb-4377-fc57-f3b4b9e5af99"
+      },
+      "source": [
+        "# Check for NaN counts again\n",
+        "\n",
+        "pd.isna(loans_df['revol_util']).value_counts(dropna=False)"
+      ],
+      "execution_count": 33,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "False    128397\n",
+              "Name: revol_util, dtype: int64"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 33
         }
       ]
     },
@@ -6213,18 +6284,18 @@
       "metadata": {
         "id": "hoNjczJHf11x",
         "colab_type": "code",
-        "outputId": "93918ef8-1d0e-484f-afdf-d87df4ba7cda",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 34
-        }
+        },
+        "outputId": "afc3f0da-9761-47fb-84a0-827dd353dcb7"
       },
       "source": [
         "# Check function cast_strip\n",
         "\n",
         "cast_strip('91%')"
       ],
-      "execution_count": 47,
+      "execution_count": 34,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -6236,7 +6307,7 @@
           "metadata": {
             "tags": []
           },
-          "execution_count": 47
+          "execution_count": 34
         }
       ]
     },
@@ -6245,11 +6316,11 @@
       "metadata": {
         "id": "plb0HqiAf1mg",
         "colab_type": "code",
-        "outputId": "9d69385f-9dde-4f12-de38-a82fcd82dfc0",
         "colab": {
           "base_uri": "https://localhost:8080/",
           "height": 34
-        }
+        },
+        "outputId": "34d872de-537d-473c-9d08-d3597f737392"
       },
       "source": [
         "# Use cast_strip on 'revol_util' column, via .appened list\n",
@@ -6261,7 +6332,7 @@
         "\n",
         "b_list[:10]"
       ],
-      "execution_count": 48,
+      "execution_count": 35,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -6273,134 +6344,574 @@
           "metadata": {
             "tags": []
           },
-          "execution_count": 48
+          "execution_count": 35
         }
       ]
-    },
-    {
-      "cell_type": "code",
-      "metadata": {
-        "id": "sO6dypgif1bj",
-        "colab_type": "code",
-        "outputId": "4c5ec555-b974-4e9f-fed2-50f5c63c07ea",
-        "colab": {
-          "base_uri": "https://localhost:8080/",
-          "height": 218
-        }
-      },
-      "source": [
-        "loans_df ['revol_util'].value_counts (dropna=False)"
-      ],
-      "execution_count": 50,
-      "outputs": [
-        {
-          "output_type": "execute_result",
-          "data": {
-            "text/plain": [
-              "0%        1132\n",
-              "43%        225\n",
-              "49%        222\n",
-              "39.1%      220\n",
-              "32%        217\n",
-              "          ... \n",
-              "105.8%       1\n",
-              "108.8%       1\n",
-              "102.1%       1\n",
-              "105.5%       1\n",
-              "111.9%       1\n",
-              "Name: revol_util, Length: 1075, dtype: int64"
-            ]
-          },
-          "metadata": {
-            "tags": []
-          },
-          "execution_count": 50
-        }
-      ]
-    },
-    {
-      "cell_type": "code",
-      "metadata": {
-        "id": "RUBu_lUN6LpB",
-        "colab_type": "code",
-        "colab": {
-          "base_uri": "https://localhost:8080/",
-          "height": 67
-        },
-        "outputId": "83fb19c2-3e58-4120-bb80-8c7393a61332"
-      },
-      "source": [
-        "pd.isna(loans_df['revol_util']).value_counts(dropna=False)"
-      ],
-      "execution_count": 54,
-      "outputs": [
-        {
-          "output_type": "execute_result",
-          "data": {
-            "text/plain": [
-              "False    128241\n",
-              "True        156\n",
-              "Name: revol_util, dtype: int64"
-            ]
-          },
-          "metadata": {
-            "tags": []
-          },
-          "execution_count": 54
-        }
-      ]
-    },
-    {
-      "cell_type": "code",
-      "metadata": {
-        "id": "KPngr52l6Lnp",
-        "colab_type": "code",
-        "colab": {}
-      },
-      "source": [
-        ""
-      ],
-      "execution_count": 0,
-      "outputs": []
-    },
-    {
-      "cell_type": "code",
-      "metadata": {
-        "id": "r46O4MKJ6Lhe",
-        "colab_type": "code",
-        "colab": {}
-      },
-      "source": [
-        ""
-      ],
-      "execution_count": 0,
-      "outputs": []
-    },
-    {
-      "cell_type": "code",
-      "metadata": {
-        "id": "anW9rsU56LcG",
-        "colab_type": "code",
-        "colab": {}
-      },
-      "source": [
-        ""
-      ],
-      "execution_count": 0,
-      "outputs": []
     },
     {
       "cell_type": "code",
       "metadata": {
         "id": "yMTG5w5M6LZU",
         "colab_type": "code",
-        "colab": {}
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 328
+        },
+        "outputId": "7d6036c9-15d2-4964-cad1-aa45d7ea7f5e"
       },
       "source": [
-        ""
+        "loans_df.head()"
       ],
-      "execution_count": 0,
-      "outputs": []
+      "execution_count": 36,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>loan_amnt</th>\n",
+              "      <th>funded_amnt</th>\n",
+              "      <th>funded_amnt_inv</th>\n",
+              "      <th>term_months</th>\n",
+              "      <th>int_rate</th>\n",
+              "      <th>installment</th>\n",
+              "      <th>grade</th>\n",
+              "      <th>sub_grade</th>\n",
+              "      <th>emp_title</th>\n",
+              "      <th>emp_length</th>\n",
+              "      <th>home_ownership</th>\n",
+              "      <th>annual_inc</th>\n",
+              "      <th>verification_status</th>\n",
+              "      <th>issue_d</th>\n",
+              "      <th>loan_status</th>\n",
+              "      <th>pymnt_plan</th>\n",
+              "      <th>purpose</th>\n",
+              "      <th>title</th>\n",
+              "      <th>zip_code</th>\n",
+              "      <th>addr_state</th>\n",
+              "      <th>dti</th>\n",
+              "      <th>delinq_2yrs</th>\n",
+              "      <th>earliest_cr_line</th>\n",
+              "      <th>inq_last_6mths</th>\n",
+              "      <th>mths_since_last_delinq</th>\n",
+              "      <th>mths_since_last_record</th>\n",
+              "      <th>open_acc</th>\n",
+              "      <th>pub_rec</th>\n",
+              "      <th>revol_bal</th>\n",
+              "      <th>revol_util</th>\n",
+              "      <th>total_acc</th>\n",
+              "      <th>initial_list_status</th>\n",
+              "      <th>out_prncp</th>\n",
+              "      <th>out_prncp_inv</th>\n",
+              "      <th>total_pymnt</th>\n",
+              "      <th>total_pymnt_inv</th>\n",
+              "      <th>total_rec_prncp</th>\n",
+              "      <th>total_rec_int</th>\n",
+              "      <th>total_rec_late_fee</th>\n",
+              "      <th>recoveries</th>\n",
+              "      <th>...</th>\n",
+              "      <th>total_bal_ex_mort</th>\n",
+              "      <th>total_bc_limit</th>\n",
+              "      <th>total_il_high_credit_limit</th>\n",
+              "      <th>revol_bal_joint</th>\n",
+              "      <th>sec_app_earliest_cr_line</th>\n",
+              "      <th>sec_app_inq_last_6mths</th>\n",
+              "      <th>sec_app_mort_acc</th>\n",
+              "      <th>sec_app_open_acc</th>\n",
+              "      <th>sec_app_revol_util</th>\n",
+              "      <th>sec_app_open_act_il</th>\n",
+              "      <th>sec_app_num_rev_accts</th>\n",
+              "      <th>sec_app_chargeoff_within_12_mths</th>\n",
+              "      <th>sec_app_collections_12_mths_ex_med</th>\n",
+              "      <th>sec_app_mths_since_last_major_derog</th>\n",
+              "      <th>hardship_flag</th>\n",
+              "      <th>hardship_type</th>\n",
+              "      <th>hardship_reason</th>\n",
+              "      <th>hardship_status</th>\n",
+              "      <th>deferral_term</th>\n",
+              "      <th>hardship_amount</th>\n",
+              "      <th>hardship_start_date</th>\n",
+              "      <th>hardship_end_date</th>\n",
+              "      <th>payment_plan_start_date</th>\n",
+              "      <th>hardship_length</th>\n",
+              "      <th>hardship_dpd</th>\n",
+              "      <th>hardship_loan_status</th>\n",
+              "      <th>orig_projected_additional_accrued_interest</th>\n",
+              "      <th>hardship_payoff_balance_amount</th>\n",
+              "      <th>hardship_last_payment_amount</th>\n",
+              "      <th>debt_settlement_flag</th>\n",
+              "      <th>debt_settlement_flag_date</th>\n",
+              "      <th>settlement_status</th>\n",
+              "      <th>settlement_date</th>\n",
+              "      <th>settlement_amount</th>\n",
+              "      <th>settlement_percentage</th>\n",
+              "      <th>settlement_term</th>\n",
+              "      <th>int_rate_improved</th>\n",
+              "      <th>loan_status_is_great</th>\n",
+              "      <th>last_pymnt_d_month</th>\n",
+              "      <th>last_pymnt_d_day</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>6000</td>\n",
+              "      <td>6000</td>\n",
+              "      <td>6000.0</td>\n",
+              "      <td>36</td>\n",
+              "      <td>14.47%</td>\n",
+              "      <td>206.44</td>\n",
+              "      <td>C</td>\n",
+              "      <td>C2</td>\n",
+              "      <td>Manager</td>\n",
+              "      <td>10+ years</td>\n",
+              "      <td>RENT</td>\n",
+              "      <td>55000.0</td>\n",
+              "      <td>Verified</td>\n",
+              "      <td>Dec-2018</td>\n",
+              "      <td>Charged Off</td>\n",
+              "      <td>n</td>\n",
+              "      <td>credit_card</td>\n",
+              "      <td>Credit card refinancing</td>\n",
+              "      <td>104xx</td>\n",
+              "      <td>NY</td>\n",
+              "      <td>10.65</td>\n",
+              "      <td>0</td>\n",
+              "      <td>Jun-2006</td>\n",
+              "      <td>0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>6</td>\n",
+              "      <td>0</td>\n",
+              "      <td>4196</td>\n",
+              "      <td>91.2%</td>\n",
+              "      <td>8</td>\n",
+              "      <td>w</td>\n",
+              "      <td>0.00</td>\n",
+              "      <td>0.00</td>\n",
+              "      <td>1106.520000</td>\n",
+              "      <td>1106.52</td>\n",
+              "      <td>546.14</td>\n",
+              "      <td>272.38</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>288.0</td>\n",
+              "      <td>...</td>\n",
+              "      <td>12514</td>\n",
+              "      <td>4300</td>\n",
+              "      <td>11200</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>Y</td>\n",
+              "      <td>Oct-2019</td>\n",
+              "      <td>ACTIVE</td>\n",
+              "      <td>Oct-2019</td>\n",
+              "      <td>3479.0</td>\n",
+              "      <td>60.01</td>\n",
+              "      <td>24.0</td>\n",
+              "      <td>14.47</td>\n",
+              "      <td>0</td>\n",
+              "      <td></td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>24000</td>\n",
+              "      <td>24000</td>\n",
+              "      <td>24000.0</td>\n",
+              "      <td>36</td>\n",
+              "      <td>10.33%</td>\n",
+              "      <td>778.14</td>\n",
+              "      <td>B</td>\n",
+              "      <td>B1</td>\n",
+              "      <td>Maintenance Manager</td>\n",
+              "      <td>10+ years</td>\n",
+              "      <td>MORTGAGE</td>\n",
+              "      <td>100000.0</td>\n",
+              "      <td>Not Verified</td>\n",
+              "      <td>Dec-2018</td>\n",
+              "      <td>Current</td>\n",
+              "      <td>n</td>\n",
+              "      <td>debt_consolidation</td>\n",
+              "      <td>Debt consolidation</td>\n",
+              "      <td>606xx</td>\n",
+              "      <td>IL</td>\n",
+              "      <td>19.14</td>\n",
+              "      <td>0</td>\n",
+              "      <td>Oct-1996</td>\n",
+              "      <td>3</td>\n",
+              "      <td>39.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>14</td>\n",
+              "      <td>0</td>\n",
+              "      <td>8547</td>\n",
+              "      <td>27.7%</td>\n",
+              "      <td>28</td>\n",
+              "      <td>w</td>\n",
+              "      <td>16807.30</td>\n",
+              "      <td>16807.30</td>\n",
+              "      <td>9317.020000</td>\n",
+              "      <td>9317.02</td>\n",
+              "      <td>7192.70</td>\n",
+              "      <td>2124.32</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>...</td>\n",
+              "      <td>50686</td>\n",
+              "      <td>25900</td>\n",
+              "      <td>61514</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>10.33</td>\n",
+              "      <td>1</td>\n",
+              "      <td></td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>30000</td>\n",
+              "      <td>30000</td>\n",
+              "      <td>30000.0</td>\n",
+              "      <td>36</td>\n",
+              "      <td>15.02%</td>\n",
+              "      <td>1040.26</td>\n",
+              "      <td>C</td>\n",
+              "      <td>C3</td>\n",
+              "      <td>Firefighter</td>\n",
+              "      <td>10+ years</td>\n",
+              "      <td>RENT</td>\n",
+              "      <td>90000.0</td>\n",
+              "      <td>Verified</td>\n",
+              "      <td>Dec-2018</td>\n",
+              "      <td>Fully Paid</td>\n",
+              "      <td>n</td>\n",
+              "      <td>debt_consolidation</td>\n",
+              "      <td>Debt consolidation</td>\n",
+              "      <td>681xx</td>\n",
+              "      <td>NE</td>\n",
+              "      <td>22.23</td>\n",
+              "      <td>0</td>\n",
+              "      <td>May-2007</td>\n",
+              "      <td>1</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>8</td>\n",
+              "      <td>0</td>\n",
+              "      <td>25754</td>\n",
+              "      <td>48%</td>\n",
+              "      <td>23</td>\n",
+              "      <td>w</td>\n",
+              "      <td>0.00</td>\n",
+              "      <td>0.00</td>\n",
+              "      <td>30883.673712</td>\n",
+              "      <td>30883.67</td>\n",
+              "      <td>30000.00</td>\n",
+              "      <td>883.67</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>...</td>\n",
+              "      <td>51370</td>\n",
+              "      <td>41600</td>\n",
+              "      <td>36249</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>15.02</td>\n",
+              "      <td>1</td>\n",
+              "      <td></td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>8000</td>\n",
+              "      <td>8000</td>\n",
+              "      <td>8000.0</td>\n",
+              "      <td>36</td>\n",
+              "      <td>12.98%</td>\n",
+              "      <td>269.48</td>\n",
+              "      <td>B</td>\n",
+              "      <td>B5</td>\n",
+              "      <td>Controller</td>\n",
+              "      <td>4 years</td>\n",
+              "      <td>MORTGAGE</td>\n",
+              "      <td>95000.0</td>\n",
+              "      <td>Source Verified</td>\n",
+              "      <td>Dec-2018</td>\n",
+              "      <td>Current</td>\n",
+              "      <td>n</td>\n",
+              "      <td>credit_card</td>\n",
+              "      <td>Credit card refinancing</td>\n",
+              "      <td>480xx</td>\n",
+              "      <td>MI</td>\n",
+              "      <td>9.44</td>\n",
+              "      <td>0</td>\n",
+              "      <td>Mar-2009</td>\n",
+              "      <td>2</td>\n",
+              "      <td>73.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>7</td>\n",
+              "      <td>0</td>\n",
+              "      <td>11434</td>\n",
+              "      <td>33.3%</td>\n",
+              "      <td>20</td>\n",
+              "      <td>w</td>\n",
+              "      <td>1707.34</td>\n",
+              "      <td>1707.34</td>\n",
+              "      <td>6855.630000</td>\n",
+              "      <td>6855.63</td>\n",
+              "      <td>6292.66</td>\n",
+              "      <td>562.97</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>...</td>\n",
+              "      <td>25150</td>\n",
+              "      <td>34300</td>\n",
+              "      <td>14000</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>12.98</td>\n",
+              "      <td>1</td>\n",
+              "      <td></td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>22400</td>\n",
+              "      <td>22400</td>\n",
+              "      <td>22400.0</td>\n",
+              "      <td>60</td>\n",
+              "      <td>16.14%</td>\n",
+              "      <td>546.40</td>\n",
+              "      <td>C</td>\n",
+              "      <td>C4</td>\n",
+              "      <td>Paramedic/ Fire Fighter</td>\n",
+              "      <td>10+ years</td>\n",
+              "      <td>OWN</td>\n",
+              "      <td>56000.0</td>\n",
+              "      <td>Source Verified</td>\n",
+              "      <td>Dec-2018</td>\n",
+              "      <td>Current</td>\n",
+              "      <td>n</td>\n",
+              "      <td>credit_card</td>\n",
+              "      <td>Credit card refinancing</td>\n",
+              "      <td>234xx</td>\n",
+              "      <td>VA</td>\n",
+              "      <td>18.47</td>\n",
+              "      <td>0</td>\n",
+              "      <td>Dec-2004</td>\n",
+              "      <td>0</td>\n",
+              "      <td>75.0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>15</td>\n",
+              "      <td>0</td>\n",
+              "      <td>13555</td>\n",
+              "      <td>38.2%</td>\n",
+              "      <td>22</td>\n",
+              "      <td>w</td>\n",
+              "      <td>19230.91</td>\n",
+              "      <td>19230.91</td>\n",
+              "      <td>6526.670000</td>\n",
+              "      <td>6526.67</td>\n",
+              "      <td>3169.09</td>\n",
+              "      <td>3357.58</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>...</td>\n",
+              "      <td>32070</td>\n",
+              "      <td>28200</td>\n",
+              "      <td>23364</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>16.14</td>\n",
+              "      <td>1</td>\n",
+              "      <td></td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>5 rows × 144 columns</p>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "   loan_amnt  funded_amnt  ...  last_pymnt_d_month  last_pymnt_d_day\n",
+              "0       6000         6000  ...                                   NaN\n",
+              "1      24000        24000  ...                                   NaN\n",
+              "2      30000        30000  ...                                   NaN\n",
+              "3       8000         8000  ...                                   NaN\n",
+              "4      22400        22400  ...                                   NaN\n",
+              "\n",
+              "[5 rows x 144 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 36
+        }
+      ]
     },
     {
       "cell_type": "code",
