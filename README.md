@@ -1,7 +1,8 @@
 # Lambda School Data Science Unit 1 Sprint 1
 ## Data Wrangling and Storytelling
 
-### Assignments, Robert Sharp
+### Robert Sharp: Assignments
+
 
 - Module 1: Complete
 - Module 2: Complete
