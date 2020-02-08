@@ -8,4 +8,5 @@
 - Module 2: Complete 3/3
 - Module 3: Complete 3/3
 - Module 4: Complete 3/3
+------------------------
 - Sprint: 3/3
