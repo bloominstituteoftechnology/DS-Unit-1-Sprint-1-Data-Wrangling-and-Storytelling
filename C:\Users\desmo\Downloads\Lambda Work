@@ -1,0 +1,2177 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Dlinz1_ExplData.ipynb",
+      "provenance": [],
+      "collapsed_sections": [],
+      "authorship_tag": "ABX9TyMMPyXI9PSAjepcwr8ACn2j",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Dlinz1/DS-Unit-1-Sprint-1-Data-Wrangling-and-Storytelling/blob/master/C%3A%5CUsers%5Cdesmo%5CDownloads%5CLambda%20Work\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "tuUo1PE3rtRj",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "# The data set refers to clients of a wholesale distributor. \n",
+        "# It includes the annual spending in monetary units (m.u.) on diverse product categories\n",
+        "# There are only 3 regions. The first 2 are specific regions, and the last is a combination of mult regions."
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "QzzQ9rQ7ZJ-f",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "import pandas as pd\n",
+        "import numpy as np"
+      ],
+      "execution_count": 1,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "BpVksGK79zuI",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 419
+        },
+        "outputId": "cb78f338-1d65-4a66-d446-fa616803f333"
+      },
+      "source": [
+        "pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/00292/Wholesale%20customers%20data.csv')"
+      ],
+      "execution_count": 33,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Channel</th>\n",
+              "      <th>Region</th>\n",
+              "      <th>Fresh</th>\n",
+              "      <th>Milk</th>\n",
+              "      <th>Grocery</th>\n",
+              "      <th>Frozen</th>\n",
+              "      <th>Detergents_Paper</th>\n",
+              "      <th>Delicassen</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>2</td>\n",
+              "      <td>3</td>\n",
+              "      <td>12669</td>\n",
+              "      <td>9656</td>\n",
+              "      <td>7561</td>\n",
+              "      <td>214</td>\n",
+              "      <td>2674</td>\n",
+              "      <td>1338</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>2</td>\n",
+              "      <td>3</td>\n",
+              "      <td>7057</td>\n",
+              "      <td>9810</td>\n",
+              "      <td>9568</td>\n",
+              "      <td>1762</td>\n",
+              "      <td>3293</td>\n",
+              "      <td>1776</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>2</td>\n",
+              "      <td>3</td>\n",
+              "      <td>6353</td>\n",
+              "      <td>8808</td>\n",
+              "      <td>7684</td>\n",
+              "      <td>2405</td>\n",
+              "      <td>3516</td>\n",
+              "      <td>7844</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>1</td>\n",
+              "      <td>3</td>\n",
+              "      <td>13265</td>\n",
+              "      <td>1196</td>\n",
+              "      <td>4221</td>\n",
+              "      <td>6404</td>\n",
+              "      <td>507</td>\n",
+              "      <td>1788</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>2</td>\n",
+              "      <td>3</td>\n",
+              "      <td>22615</td>\n",
+              "      <td>5410</td>\n",
+              "      <td>7198</td>\n",
+              "      <td>3915</td>\n",
+              "      <td>1777</td>\n",
+              "      <td>5185</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>435</th>\n",
+              "      <td>1</td>\n",
+              "      <td>3</td>\n",
+              "      <td>29703</td>\n",
+              "      <td>12051</td>\n",
+              "      <td>16027</td>\n",
+              "      <td>13135</td>\n",
+              "      <td>182</td>\n",
+              "      <td>2204</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>436</th>\n",
+              "      <td>1</td>\n",
+              "      <td>3</td>\n",
+              "      <td>39228</td>\n",
+              "      <td>1431</td>\n",
+              "      <td>764</td>\n",
+              "      <td>4510</td>\n",
+              "      <td>93</td>\n",
+              "      <td>2346</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>437</th>\n",
+              "      <td>2</td>\n",
+              "      <td>3</td>\n",
+              "      <td>14531</td>\n",
+              "      <td>15488</td>\n",
+              "      <td>30243</td>\n",
+              "      <td>437</td>\n",
+              "      <td>14841</td>\n",
+              "      <td>1867</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>438</th>\n",
+              "      <td>1</td>\n",
+              "      <td>3</td>\n",
+              "      <td>10290</td>\n",
+              "      <td>1981</td>\n",
+              "      <td>2232</td>\n",
+              "      <td>1038</td>\n",
+              "      <td>168</td>\n",
+              "      <td>2125</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>439</th>\n",
+              "      <td>1</td>\n",
+              "      <td>3</td>\n",
+              "      <td>2787</td>\n",
+              "      <td>1698</td>\n",
+              "      <td>2510</td>\n",
+              "      <td>65</td>\n",
+              "      <td>477</td>\n",
+              "      <td>52</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>440 rows × 8 columns</p>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "     Channel  Region  Fresh  ...  Frozen  Detergents_Paper  Delicassen\n",
+              "0          2       3  12669  ...     214              2674        1338\n",
+              "1          2       3   7057  ...    1762              3293        1776\n",
+              "2          2       3   6353  ...    2405              3516        7844\n",
+              "3          1       3  13265  ...    6404               507        1788\n",
+              "4          2       3  22615  ...    3915              1777        5185\n",
+              "..       ...     ...    ...  ...     ...               ...         ...\n",
+              "435        1       3  29703  ...   13135               182        2204\n",
+              "436        1       3  39228  ...    4510                93        2346\n",
+              "437        2       3  14531  ...     437             14841        1867\n",
+              "438        1       3  10290  ...    1038               168        2125\n",
+              "439        1       3   2787  ...      65               477          52\n",
+              "\n",
+              "[440 rows x 8 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 33
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "25ce2_dghL25",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "WholeslCust = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/00292/Wholesale%20customers%20data.csv')"
+      ],
+      "execution_count": 34,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "Ewm2YyHlqf2b",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 204
+        },
+        "outputId": "4c4359ae-34f3-4a1c-fffe-cb26ad092acb"
+      },
+      "source": [
+        "WholeslCust.head()"
+      ],
+      "execution_count": 36,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Channel</th>\n",
+              "      <th>Region</th>\n",
+              "      <th>Fresh</th>\n",
+              "      <th>Milk</th>\n",
+              "      <th>Grocery</th>\n",
+              "      <th>Frozen</th>\n",
+              "      <th>Detergents_Paper</th>\n",
+              "      <th>Delicassen</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>2</td>\n",
+              "      <td>3</td>\n",
+              "      <td>12669</td>\n",
+              "      <td>9656</td>\n",
+              "      <td>7561</td>\n",
+              "      <td>214</td>\n",
+              "      <td>2674</td>\n",
+              "      <td>1338</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>2</td>\n",
+              "      <td>3</td>\n",
+              "      <td>7057</td>\n",
+              "      <td>9810</td>\n",
+              "      <td>9568</td>\n",
+              "      <td>1762</td>\n",
+              "      <td>3293</td>\n",
+              "      <td>1776</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>2</td>\n",
+              "      <td>3</td>\n",
+              "      <td>6353</td>\n",
+              "      <td>8808</td>\n",
+              "      <td>7684</td>\n",
+              "      <td>2405</td>\n",
+              "      <td>3516</td>\n",
+              "      <td>7844</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>1</td>\n",
+              "      <td>3</td>\n",
+              "      <td>13265</td>\n",
+              "      <td>1196</td>\n",
+              "      <td>4221</td>\n",
+              "      <td>6404</td>\n",
+              "      <td>507</td>\n",
+              "      <td>1788</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>2</td>\n",
+              "      <td>3</td>\n",
+              "      <td>22615</td>\n",
+              "      <td>5410</td>\n",
+              "      <td>7198</td>\n",
+              "      <td>3915</td>\n",
+              "      <td>1777</td>\n",
+              "      <td>5185</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "   Channel  Region  Fresh  Milk  Grocery  Frozen  Detergents_Paper  Delicassen\n",
+              "0        2       3  12669  9656     7561     214              2674        1338\n",
+              "1        2       3   7057  9810     9568    1762              3293        1776\n",
+              "2        2       3   6353  8808     7684    2405              3516        7844\n",
+              "3        1       3  13265  1196     4221    6404               507        1788\n",
+              "4        2       3  22615  5410     7198    3915              1777        5185"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 36
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "bd0YcJVjqoPG",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        },
+        "outputId": "52b014be-1ed4-4736-8532-bdc51de59cf0"
+      },
+      "source": [
+        "WholeslCust.shape"
+      ],
+      "execution_count": 38,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "(440, 8)"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 38
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "omjl1Updq-Vm",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 170
+        },
+        "outputId": "450a5af1-98c6-4b63-eba3-b852091c5011"
+      },
+      "source": [
+        "WholeslCust.dtypes"
+      ],
+      "execution_count": 39,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Channel             int64\n",
+              "Region              int64\n",
+              "Fresh               int64\n",
+              "Milk                int64\n",
+              "Grocery             int64\n",
+              "Frozen              int64\n",
+              "Detergents_Paper    int64\n",
+              "Delicassen          int64\n",
+              "dtype: object"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 39
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "edcloBd3rQnS",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 297
+        },
+        "outputId": "74719631-3696-4033-e5d1-555179732627"
+      },
+      "source": [
+        "WholeslCust.describe()"
+      ],
+      "execution_count": 40,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Channel</th>\n",
+              "      <th>Region</th>\n",
+              "      <th>Fresh</th>\n",
+              "      <th>Milk</th>\n",
+              "      <th>Grocery</th>\n",
+              "      <th>Frozen</th>\n",
+              "      <th>Detergents_Paper</th>\n",
+              "      <th>Delicassen</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>count</th>\n",
+              "      <td>440.000000</td>\n",
+              "      <td>440.000000</td>\n",
+              "      <td>440.000000</td>\n",
+              "      <td>440.000000</td>\n",
+              "      <td>440.000000</td>\n",
+              "      <td>440.000000</td>\n",
+              "      <td>440.000000</td>\n",
+              "      <td>440.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>mean</th>\n",
+              "      <td>1.322727</td>\n",
+              "      <td>2.543182</td>\n",
+              "      <td>12000.297727</td>\n",
+              "      <td>5796.265909</td>\n",
+              "      <td>7951.277273</td>\n",
+              "      <td>3071.931818</td>\n",
+              "      <td>2881.493182</td>\n",
+              "      <td>1524.870455</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>std</th>\n",
+              "      <td>0.468052</td>\n",
+              "      <td>0.774272</td>\n",
+              "      <td>12647.328865</td>\n",
+              "      <td>7380.377175</td>\n",
+              "      <td>9503.162829</td>\n",
+              "      <td>4854.673333</td>\n",
+              "      <td>4767.854448</td>\n",
+              "      <td>2820.105937</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>min</th>\n",
+              "      <td>1.000000</td>\n",
+              "      <td>1.000000</td>\n",
+              "      <td>3.000000</td>\n",
+              "      <td>55.000000</td>\n",
+              "      <td>3.000000</td>\n",
+              "      <td>25.000000</td>\n",
+              "      <td>3.000000</td>\n",
+              "      <td>3.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>25%</th>\n",
+              "      <td>1.000000</td>\n",
+              "      <td>2.000000</td>\n",
+              "      <td>3127.750000</td>\n",
+              "      <td>1533.000000</td>\n",
+              "      <td>2153.000000</td>\n",
+              "      <td>742.250000</td>\n",
+              "      <td>256.750000</td>\n",
+              "      <td>408.250000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>50%</th>\n",
+              "      <td>1.000000</td>\n",
+              "      <td>3.000000</td>\n",
+              "      <td>8504.000000</td>\n",
+              "      <td>3627.000000</td>\n",
+              "      <td>4755.500000</td>\n",
+              "      <td>1526.000000</td>\n",
+              "      <td>816.500000</td>\n",
+              "      <td>965.500000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>75%</th>\n",
+              "      <td>2.000000</td>\n",
+              "      <td>3.000000</td>\n",
+              "      <td>16933.750000</td>\n",
+              "      <td>7190.250000</td>\n",
+              "      <td>10655.750000</td>\n",
+              "      <td>3554.250000</td>\n",
+              "      <td>3922.000000</td>\n",
+              "      <td>1820.250000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>max</th>\n",
+              "      <td>2.000000</td>\n",
+              "      <td>3.000000</td>\n",
+              "      <td>112151.000000</td>\n",
+              "      <td>73498.000000</td>\n",
+              "      <td>92780.000000</td>\n",
+              "      <td>60869.000000</td>\n",
+              "      <td>40827.000000</td>\n",
+              "      <td>47943.000000</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "          Channel      Region  ...  Detergents_Paper    Delicassen\n",
+              "count  440.000000  440.000000  ...        440.000000    440.000000\n",
+              "mean     1.322727    2.543182  ...       2881.493182   1524.870455\n",
+              "std      0.468052    0.774272  ...       4767.854448   2820.105937\n",
+              "min      1.000000    1.000000  ...          3.000000      3.000000\n",
+              "25%      1.000000    2.000000  ...        256.750000    408.250000\n",
+              "50%      1.000000    3.000000  ...        816.500000    965.500000\n",
+              "75%      2.000000    3.000000  ...       3922.000000   1820.250000\n",
+              "max      2.000000    3.000000  ...      40827.000000  47943.000000\n",
+              "\n",
+              "[8 rows x 8 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 40
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "O1JYWiYVslJT",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 669
+        },
+        "outputId": "6f4ae383-7633-4446-e076-ab60906bf182"
+      },
+      "source": [
+        "WholeslCust[['Region', 'Fresh', 'Frozen']].sample(20)"
+      ],
+      "execution_count": 45,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Region</th>\n",
+              "      <th>Fresh</th>\n",
+              "      <th>Frozen</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>281</th>\n",
+              "      <td>3</td>\n",
+              "      <td>12238</td>\n",
+              "      <td>1093</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>291</th>\n",
+              "      <td>3</td>\n",
+              "      <td>6022</td>\n",
+              "      <td>2507</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>268</th>\n",
+              "      <td>1</td>\n",
+              "      <td>11908</td>\n",
+              "      <td>1069</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>139</th>\n",
+              "      <td>3</td>\n",
+              "      <td>5387</td>\n",
+              "      <td>825</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>437</th>\n",
+              "      <td>3</td>\n",
+              "      <td>14531</td>\n",
+              "      <td>437</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>176</th>\n",
+              "      <td>3</td>\n",
+              "      <td>45640</td>\n",
+              "      <td>7368</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>58</th>\n",
+              "      <td>3</td>\n",
+              "      <td>13779</td>\n",
+              "      <td>596</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>386</th>\n",
+              "      <td>3</td>\n",
+              "      <td>1206</td>\n",
+              "      <td>1945</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>249</th>\n",
+              "      <td>1</td>\n",
+              "      <td>8040</td>\n",
+              "      <td>6340</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>229</th>\n",
+              "      <td>1</td>\n",
+              "      <td>8656</td>\n",
+              "      <td>6845</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>380</th>\n",
+              "      <td>3</td>\n",
+              "      <td>28257</td>\n",
+              "      <td>3881</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>408</th>\n",
+              "      <td>3</td>\n",
+              "      <td>8257</td>\n",
+              "      <td>1646</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>344</th>\n",
+              "      <td>3</td>\n",
+              "      <td>3043</td>\n",
+              "      <td>2234</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>253</th>\n",
+              "      <td>1</td>\n",
+              "      <td>29526</td>\n",
+              "      <td>432</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>417</th>\n",
+              "      <td>3</td>\n",
+              "      <td>5065</td>\n",
+              "      <td>364</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>6</th>\n",
+              "      <td>3</td>\n",
+              "      <td>12126</td>\n",
+              "      <td>480</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>360</th>\n",
+              "      <td>3</td>\n",
+              "      <td>19746</td>\n",
+              "      <td>2601</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>232</th>\n",
+              "      <td>1</td>\n",
+              "      <td>25962</td>\n",
+              "      <td>638</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>3</td>\n",
+              "      <td>7057</td>\n",
+              "      <td>1762</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>145</th>\n",
+              "      <td>3</td>\n",
+              "      <td>22039</td>\n",
+              "      <td>42</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "     Region  Fresh  Frozen\n",
+              "281       3  12238    1093\n",
+              "291       3   6022    2507\n",
+              "268       1  11908    1069\n",
+              "139       3   5387     825\n",
+              "437       3  14531     437\n",
+              "176       3  45640    7368\n",
+              "58        3  13779     596\n",
+              "386       3   1206    1945\n",
+              "249       1   8040    6340\n",
+              "229       1   8656    6845\n",
+              "380       3  28257    3881\n",
+              "408       3   8257    1646\n",
+              "344       3   3043    2234\n",
+              "253       1  29526     432\n",
+              "417       3   5065     364\n",
+              "6         3  12126     480\n",
+              "360       3  19746    2601\n",
+              "232       1  25962     638\n",
+              "1         3   7057    1762\n",
+              "145       3  22039      42"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 45
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "uc_Hx6PiuqXQ",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 170
+        },
+        "outputId": "a67b8e1b-41bb-49af-c89e-1c2aee70d404"
+      },
+      "source": [
+        "WholeslCust.iloc[307]"
+      ],
+      "execution_count": 101,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Channel                 1\n",
+              "Region                  2\n",
+              "Fresh               17327\n",
+              "Milk                 2374\n",
+              "Grocery              2842\n",
+              "Frozen               1149\n",
+              "Detergents_Paper      351\n",
+              "Delicassen            925\n",
+              "Name: 307, dtype: int64"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 101
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "Au8gHMzox37p",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 68
+        },
+        "outputId": "a52783ad-8ac9-431e-e657-205ad69cb2f4"
+      },
+      "source": [
+        "WholeslCust['Channel'].value_counts(ascending=False)"
+      ],
+      "execution_count": 67,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "1    298\n",
+              "2    142\n",
+              "Name: Channel, dtype: int64"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 67
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "vJb6uiO9zFwk",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 170
+        },
+        "outputId": "16e3145a-d944-48d5-e2a1-3791e242e5f0"
+      },
+      "source": [
+        "WholeslCust.isnull().sum()"
+      ],
+      "execution_count": 68,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Channel             0\n",
+              "Region              0\n",
+              "Fresh               0\n",
+              "Milk                0\n",
+              "Grocery             0\n",
+              "Frozen              0\n",
+              "Detergents_Paper    0\n",
+              "Delicassen          0\n",
+              "dtype: int64"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 68
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "E_U_kgN-y0jF",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        },
+        "outputId": "a549443d-3f86-45bc-8a63-29561e69388b"
+      },
+      "source": [
+        "WholeslCust['Region'].isnull().sum()"
+      ],
+      "execution_count": 69,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 69
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "IhioO6krzmZx",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 85
+        },
+        "outputId": "2f1ba24a-3002-426c-84dd-94c204cc10a1"
+      },
+      "source": [
+        "WholeslCust['Region'].value_counts().head() "
+      ],
+      "execution_count": 73,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "3    316\n",
+              "1     77\n",
+              "2     47\n",
+              "Name: Region, dtype: int64"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 73
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "CotaVOyW1VQd",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "Reg2 = WholeslCust[WholeslCust.Region.isin([\"2\"])]"
+      ],
+      "execution_count": 92,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "ybZTMYpE7YUS",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        },
+        "outputId": "a39b30e7-c45b-4e07-fbae-a1d93a96bce2"
+      },
+      "source": [
+        "Reg2.shape # matches cell 73"
+      ],
+      "execution_count": 95,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "(47, 8)"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 95
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "scD2xvvmCHYs",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 297
+        },
+        "outputId": "623d28da-5971-4e8a-ddb1-11c6875a06ce"
+      },
+      "source": [
+        "Reg2.describe() #75% are listed in channel 2"
+      ],
+      "execution_count": 99,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Channel</th>\n",
+              "      <th>Region</th>\n",
+              "      <th>Fresh</th>\n",
+              "      <th>Milk</th>\n",
+              "      <th>Grocery</th>\n",
+              "      <th>Frozen</th>\n",
+              "      <th>Detergents_Paper</th>\n",
+              "      <th>Delicassen</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>count</th>\n",
+              "      <td>47.000000</td>\n",
+              "      <td>47.0</td>\n",
+              "      <td>47.000000</td>\n",
+              "      <td>47.000000</td>\n",
+              "      <td>47.000000</td>\n",
+              "      <td>47.000000</td>\n",
+              "      <td>47.000000</td>\n",
+              "      <td>47.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>mean</th>\n",
+              "      <td>1.404255</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>9887.680851</td>\n",
+              "      <td>5088.170213</td>\n",
+              "      <td>9218.595745</td>\n",
+              "      <td>4045.361702</td>\n",
+              "      <td>3687.468085</td>\n",
+              "      <td>1159.702128</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>std</th>\n",
+              "      <td>0.496053</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>8387.899211</td>\n",
+              "      <td>5826.343145</td>\n",
+              "      <td>10842.745314</td>\n",
+              "      <td>9151.784954</td>\n",
+              "      <td>6514.717668</td>\n",
+              "      <td>1050.739841</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>min</th>\n",
+              "      <td>1.000000</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>3.000000</td>\n",
+              "      <td>333.000000</td>\n",
+              "      <td>1330.000000</td>\n",
+              "      <td>131.000000</td>\n",
+              "      <td>15.000000</td>\n",
+              "      <td>51.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>25%</th>\n",
+              "      <td>1.000000</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>2751.500000</td>\n",
+              "      <td>1430.500000</td>\n",
+              "      <td>2792.500000</td>\n",
+              "      <td>811.500000</td>\n",
+              "      <td>282.500000</td>\n",
+              "      <td>540.500000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>50%</th>\n",
+              "      <td>1.000000</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>8090.000000</td>\n",
+              "      <td>2374.000000</td>\n",
+              "      <td>6114.000000</td>\n",
+              "      <td>1455.000000</td>\n",
+              "      <td>811.000000</td>\n",
+              "      <td>898.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>75%</th>\n",
+              "      <td>2.000000</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>14925.500000</td>\n",
+              "      <td>5772.500000</td>\n",
+              "      <td>11758.500000</td>\n",
+              "      <td>3272.000000</td>\n",
+              "      <td>4324.500000</td>\n",
+              "      <td>1538.500000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>max</th>\n",
+              "      <td>2.000000</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>32717.000000</td>\n",
+              "      <td>25071.000000</td>\n",
+              "      <td>67298.000000</td>\n",
+              "      <td>60869.000000</td>\n",
+              "      <td>38102.000000</td>\n",
+              "      <td>5609.000000</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "         Channel  Region  ...  Detergents_Paper   Delicassen\n",
+              "count  47.000000    47.0  ...         47.000000    47.000000\n",
+              "mean    1.404255     2.0  ...       3687.468085  1159.702128\n",
+              "std     0.496053     0.0  ...       6514.717668  1050.739841\n",
+              "min     1.000000     2.0  ...         15.000000    51.000000\n",
+              "25%     1.000000     2.0  ...        282.500000   540.500000\n",
+              "50%     1.000000     2.0  ...        811.000000   898.000000\n",
+              "75%     2.000000     2.0  ...       4324.500000  1538.500000\n",
+              "max     2.000000     2.0  ...      38102.000000  5609.000000\n",
+              "\n",
+              "[8 rows x 8 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 99
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "Znr4WZqjBoru",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 68
+        },
+        "outputId": "4e5212aa-2f3f-48c3-822a-c6cac407db8a"
+      },
+      "source": [
+        "Reg2[['Fresh', 'Frozen']].sum()"
+      ],
+      "execution_count": 98,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Fresh     464721\n",
+              "Frozen    190132\n",
+              "dtype: int64"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 98
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "sNZfroOfCl9f",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 68
+        },
+        "outputId": "9cb035ab-b480-4ed1-d201-a4348158e6f0"
+      },
+      "source": [
+        "WholeslCust[['Fresh', 'Frozen']].sum()"
+      ],
+      "execution_count": 100,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Fresh     5280131\n",
+              "Frozen    1351650\n",
+              "dtype: int64"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 100
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "xllwjtJ-BVSz",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 669
+        },
+        "outputId": "ec2b8fb8-1cc3-438e-b8de-7e387af3c399"
+      },
+      "source": [
+        "Reg2[['Fresh', 'Frozen']].sample(20) # 307 check out with iloc in 101"
+      ],
+      "execution_count": 97,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Fresh</th>\n",
+              "      <th>Frozen</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>307</th>\n",
+              "      <td>17327</td>\n",
+              "      <td>1149</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>328</th>\n",
+              "      <td>16933</td>\n",
+              "      <td>7849</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>306</th>\n",
+              "      <td>6468</td>\n",
+              "      <td>1840</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>317</th>\n",
+              "      <td>1182</td>\n",
+              "      <td>978</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>325</th>\n",
+              "      <td>32717</td>\n",
+              "      <td>60869</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>310</th>\n",
+              "      <td>7034</td>\n",
+              "      <td>12569</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>338</th>\n",
+              "      <td>3</td>\n",
+              "      <td>15601</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>334</th>\n",
+              "      <td>16823</td>\n",
+              "      <td>11559</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>322</th>\n",
+              "      <td>15881</td>\n",
+              "      <td>3703</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>324</th>\n",
+              "      <td>25977</td>\n",
+              "      <td>2369</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>297</th>\n",
+              "      <td>8090</td>\n",
+              "      <td>1455</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>296</th>\n",
+              "      <td>19087</td>\n",
+              "      <td>3045</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>312</th>\n",
+              "      <td>2137</td>\n",
+              "      <td>1274</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>336</th>\n",
+              "      <td>13970</td>\n",
+              "      <td>650</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>300</th>\n",
+              "      <td>16448</td>\n",
+              "      <td>824</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>295</th>\n",
+              "      <td>7588</td>\n",
+              "      <td>417</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>331</th>\n",
+              "      <td>11223</td>\n",
+              "      <td>1234</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>293</th>\n",
+              "      <td>3996</td>\n",
+              "      <td>902</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>314</th>\n",
+              "      <td>10617</td>\n",
+              "      <td>1483</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>337</th>\n",
+              "      <td>9351</td>\n",
+              "      <td>8170</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "     Fresh  Frozen\n",
+              "307  17327    1149\n",
+              "328  16933    7849\n",
+              "306   6468    1840\n",
+              "317   1182     978\n",
+              "325  32717   60869\n",
+              "310   7034   12569\n",
+              "338      3   15601\n",
+              "334  16823   11559\n",
+              "322  15881    3703\n",
+              "324  25977    2369\n",
+              "297   8090    1455\n",
+              "296  19087    3045\n",
+              "312   2137    1274\n",
+              "336  13970     650\n",
+              "300  16448     824\n",
+              "295   7588     417\n",
+              "331  11223    1234\n",
+              "293   3996     902\n",
+              "314  10617    1483\n",
+              "337   9351    8170"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 97
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "5IWWZVphD_iV",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 222
+        },
+        "outputId": "9dc7ae51-3609-489a-bea7-d8cbda001393"
+      },
+      "source": [
+        "pd.crosstab(WholeslCust['Region'], WholeslCust['Detergents_Paper'])"
+      ],
+      "execution_count": 150,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th>Detergents_Paper</th>\n",
+              "      <th>3</th>\n",
+              "      <th>5</th>\n",
+              "      <th>7</th>\n",
+              "      <th>9</th>\n",
+              "      <th>10</th>\n",
+              "      <th>15</th>\n",
+              "      <th>20</th>\n",
+              "      <th>25</th>\n",
+              "      <th>28</th>\n",
+              "      <th>32</th>\n",
+              "      <th>41</th>\n",
+              "      <th>43</th>\n",
+              "      <th>44</th>\n",
+              "      <th>47</th>\n",
+              "      <th>49</th>\n",
+              "      <th>51</th>\n",
+              "      <th>54</th>\n",
+              "      <th>56</th>\n",
+              "      <th>58</th>\n",
+              "      <th>64</th>\n",
+              "      <th>68</th>\n",
+              "      <th>69</th>\n",
+              "      <th>70</th>\n",
+              "      <th>71</th>\n",
+              "      <th>72</th>\n",
+              "      <th>73</th>\n",
+              "      <th>74</th>\n",
+              "      <th>79</th>\n",
+              "      <th>83</th>\n",
+              "      <th>84</th>\n",
+              "      <th>86</th>\n",
+              "      <th>88</th>\n",
+              "      <th>90</th>\n",
+              "      <th>92</th>\n",
+              "      <th>93</th>\n",
+              "      <th>95</th>\n",
+              "      <th>96</th>\n",
+              "      <th>100</th>\n",
+              "      <th>101</th>\n",
+              "      <th>108</th>\n",
+              "      <th>...</th>\n",
+              "      <th>7883</th>\n",
+              "      <th>8035</th>\n",
+              "      <th>8077</th>\n",
+              "      <th>8604</th>\n",
+              "      <th>8682</th>\n",
+              "      <th>8752</th>\n",
+              "      <th>8773</th>\n",
+              "      <th>8933</th>\n",
+              "      <th>8969</th>\n",
+              "      <th>9265</th>\n",
+              "      <th>9529</th>\n",
+              "      <th>9606</th>\n",
+              "      <th>9836</th>\n",
+              "      <th>9959</th>\n",
+              "      <th>10069</th>\n",
+              "      <th>11577</th>\n",
+              "      <th>11783</th>\n",
+              "      <th>12034</th>\n",
+              "      <th>12218</th>\n",
+              "      <th>12408</th>\n",
+              "      <th>12420</th>\n",
+              "      <th>12591</th>\n",
+              "      <th>12638</th>\n",
+              "      <th>13308</th>\n",
+              "      <th>13583</th>\n",
+              "      <th>13726</th>\n",
+              "      <th>14235</th>\n",
+              "      <th>14841</th>\n",
+              "      <th>15469</th>\n",
+              "      <th>17120</th>\n",
+              "      <th>17740</th>\n",
+              "      <th>18594</th>\n",
+              "      <th>18906</th>\n",
+              "      <th>19410</th>\n",
+              "      <th>20070</th>\n",
+              "      <th>24171</th>\n",
+              "      <th>24231</th>\n",
+              "      <th>26701</th>\n",
+              "      <th>38102</th>\n",
+              "      <th>40827</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Region</th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>...</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>...</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>2</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>2</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>...</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>1</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>3 rows × 417 columns</p>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "Detergents_Paper  3      5      7      9      ...  24231  26701  38102  40827\n",
+              "Region                                        ...                            \n",
+              "1                     0      1      0      0  ...      0      0      0      0\n",
+              "2                     0      0      0      0  ...      0      0      1      0\n",
+              "3                     2      0      1      1  ...      1      1      0      1\n",
+              "\n",
+              "[3 rows x 417 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 150
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "v0KeFQmFGSmW",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "PTabs = pd.crosstab(Reg2['Detergents_Paper'], WholeslCust['Channel'],\n",
+        "                    normalize=True,\n",
+        "                    margins=True)"
+      ],
+      "execution_count": 154,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "dJH62t8xHHTr",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 450
+        },
+        "outputId": "4d5947c4-78cd-442c-8cb6-30185cb577f7"
+      },
+      "source": [
+        "PTabs"
+      ],
+      "execution_count": 152,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th>Channel</th>\n",
+              "      <th>1</th>\n",
+              "      <th>2</th>\n",
+              "      <th>All</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Detergents_Paper</th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>0.004545</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.004545</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>5</th>\n",
+              "      <td>0.002273</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.002273</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>7</th>\n",
+              "      <td>0.002273</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.002273</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>9</th>\n",
+              "      <td>0.002273</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.002273</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>10</th>\n",
+              "      <td>0.002273</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.002273</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>24231</th>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.002273</td>\n",
+              "      <td>0.002273</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>26701</th>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.002273</td>\n",
+              "      <td>0.002273</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>38102</th>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.002273</td>\n",
+              "      <td>0.002273</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>40827</th>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.002273</td>\n",
+              "      <td>0.002273</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>All</th>\n",
+              "      <td>0.677273</td>\n",
+              "      <td>0.322727</td>\n",
+              "      <td>1.000000</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>418 rows × 3 columns</p>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "Channel                  1         2       All\n",
+              "Detergents_Paper                              \n",
+              "3                 0.004545  0.000000  0.004545\n",
+              "5                 0.002273  0.000000  0.002273\n",
+              "7                 0.002273  0.000000  0.002273\n",
+              "9                 0.002273  0.000000  0.002273\n",
+              "10                0.002273  0.000000  0.002273\n",
+              "...                    ...       ...       ...\n",
+              "24231             0.000000  0.002273  0.002273\n",
+              "26701             0.000000  0.002273  0.002273\n",
+              "38102             0.000000  0.002273  0.002273\n",
+              "40827             0.000000  0.002273  0.002273\n",
+              "All               0.677273  0.322727  1.000000\n",
+              "\n",
+              "[418 rows x 3 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 152
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "qYSM3V9pHhZ8",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 279
+        },
+        "outputId": "42310b64-dc2e-4600-9343-64cb9e905d5f"
+      },
+      "source": [
+        "WholeslCust.plot.scatter('Milk', 'Region'); # Milk number reps annual spending in the millions\n",
+        "                                            # Regions 1 and 2 are spending max 25 to 30 M on milk comp to the\n",
+        "                                            # Region cluster in 3 "
+      ],
+      "execution_count": 142,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "image/png": "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\n",
+            "text/plain": [
+              "<Figure size 432x288 with 1 Axes>"
+            ]
+          },
+          "metadata": {
+            "tags": [],
+            "needs_background": "light"
+          }
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "gXSDuNv3LMH8",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 265
+        },
+        "outputId": "f0c72b0f-1824-47d2-f019-e931f6d1c860"
+      },
+      "source": [
+        "WholeslCust['Region'].plot.density();"
+      ],
+      "execution_count": 143,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "image/png": "iVBORw0KGgoAAAANSUhEUgAAAYIAAAD4CAYAAADhNOGaAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4yLjIsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy+WH4yJAAAgAElEQVR4nO3dd3hc1ZnH8e87o96tbqtYkrtlGxdhAyaEQAADARMIAQIBEghpsNmFbJaQPISWnpC2YQkJhJZAKIFQTIfQbGzLuMtFsmRbctPIstX7nP1jZowQ6po7d0bzfp5Hj6dc3ft67Jnf3HPOPUeMMSillApfDrsLUEopZS8NAqWUCnMaBEopFeY0CJRSKsxpECilVJiLsLuAkUpPTzcFBQV2l6GUUiFl3bp1dcaYjP6eC7kgKCgooLS01O4ylFIqpIjInoGe06YhpZQKcxoESikV5jQIlFIqzGkQKKVUmNMgUEqpMKdBoJRSYU6DQCmlwlzIXUeglAp9Ow428eb2WianxXFWcTZOh9hdUljTIFBKBdRT62r4n6c30eP2rIVy6owM/vTlRURHOG2uLHxp05BSKmA21zRwyz83c0JRKmt+cDp3LC/m3ztc/PylHXaXFtY0CJRSAWGM4Yf/2sKE+Ej+97KFZCbGcOWJBVy+JJ8HV1axdX+D3SWGLQ0CpVRAvL6tlo3VR7npjBlMiI869vj3ls0kMSaSP7xRYWN14U2DQCkVEA+t3E1OSiwXLsz52OPJsZFccUI+r5QdZHddi03VhTfLgkBEHhCRWhHZMsDzl4vIJhHZLCIrReQ4q2pRStlr7+FW3quo45Lj84hwfvJj56oTC3CI8ERptQ3VKSvPCB4Elg3yfBXwaWPMXOBO4D4La1FK2eiJ0mocAheX5Pb7fGZSDKdMS+eZ9ftwe0cTqcCxLAiMMe8A9YM8v9IYc8R79wOg//8hSqmQZozh+U37WTo1nYnJsQNu9/mFuRxoaGfN7gE/NpRFgqWP4BrgpYGeFJHrRKRUREpdLlcAy1JKjVVFbTN7DrdyVnH2oNudNjOTSKfw5vbaAFWmfGwPAhH5DJ4g+J+BtjHG3GeMKTHGlGRk9LvSmlIqSL227RAAn52VNeh2CdERnFCUxhve7VXg2BoEIjIP+Auw3Bhz2M5alFLWeL3sEPNyk8lOjhly29NnZrLL1aKjhwLMtiAQkXzgn8CXjTE77apDKWWdhrYuNlQf5TMzMoe1/eneswZtHgosK4ePPgasAmaISI2IXCMi3xCRb3g3uRVIA+4RkQ0ioivSKzXOrKmqx23gpClpw9o+LzWOyWlxfFCpDQSBZNmkc8aYy4Z4/lrgWquOr5Sy38pddURHOJifnzLs3zmhMI2Xtx7E7TY4dFbSgLC9s1gpNX6t2nWY4wtSRzSz6AlTUmlo62L7wSYLK1O9aRAopSxxpKWT7QebOHGYzUI+Swo922vzUOBoECilLPHhXs/1oiWTJ4zo9yalxJKfGsfqKg2CQNEgUEpZYkP1UZwOYV7u8PsHfBbmp7Ch+qgFVan+aBAopSyxfu9RZmYnEhs18pXH5uelcKixgwMNbRZUpvrSIFBK+V2P27Ch+igLRjBaqLf5+Z7mpA179awgEDQIlFJ+t8vVTHNHN/PzRtY/4DNrYiJRToc2DwWIBoFSyu983+RHe0YQHeFk1qQk1msQBIQGgVLK79ZXHyEpJoLCtPhR72NBXgqbaxro7nH7sTLVHw0CpZTfbdnXyNzc5DFdGTw/L4W2rh7Ka5v9WJnqjwaBUsqvunrc7DjURPGk5DHtZ05OEgBl+xv9UZYahAaBUsqvKl0tdHa7mT0xaUz7KUiLJzrCQdkBDQKraRAopfyq7EADALMnjS0IIpwOZmYnsk2DwHIaBEopv9q6r5GoCAdF6aPvKPaZNTGJsgONGKML2ltJg0Ap5VdlBxqZmZ1IhHPsHy+zJyVxtLWLg43tfqhMDUSDQCnlN8YYyg40jrl/wGeWdz/aPGQtDQKllN8caGjnaGvXmPsHfGZmJwI6cshqGgRKKb/xfWD764wgMSaSyWlxbDugi9RYSYNAKeU3vqGeM/0UBACzspN0CKnFNAiUUn6z81ATuRNiSYj233LosyYmsftwC62d3X7bp/o4DQKllN9U1DYzPSvRr/uckZ2AMbCrtsWv+1Uf0SBQSvlFd4+bSlcL0zIT/LrfqZmeYCmv1X4Cq2gQKKX8Yk99K509bqb6OQgmp8UR6RR2HtLJ56xiWRCIyAMiUisiWwZ4XkTk9yJSISKbRGShVbUopaxX7v2g9nfTUKTTQVF6AhV6RmAZK88IHgSWDfL82cA07891wP9ZWItSymK+D2p/nxEATM1K0OmoLWRZEBhj3gHqB9lkOfCw8fgASBGRiVbVo5Sy1s5DzeSkxBLvxxFDPtMzE9lb30pbZ4/f963s7SPIAap73a/xPvYJInKdiJSKSKnL5QpIcUqpkSmvbWZalv/PBgCmZXlHDrn0rMAKIdFZbIy5zxhTYowpycjIsLscpVQfPW7DLpf/h476+EYi6cgha9gZBPuAvF73c72PKaVCzN76Vjq7/T9iyKcgPZ4IhxzrkFb+ZWcQPAdc6R09dALQYIw5YGM9SqlRKj/k+abu72sIfCKdDgrT47XD2CL+79XxEpHHgFOBdBGpAX4ERAIYY+4FVgDnABVAK/AVq2pRSlnL9wE9zaKmIc++E3QWUotYFgTGmMuGeN4A37bq+EqpwCk/1MSk5Bi/zjHU17TMRF7ecpD2rh5iIp2WHScchURnsVIquHlGDFl3NgCeMwK3gUqXzjnkbxoESqkxcXtHDFnVUexTlO7Zf2Wd9hP4mwaBUmpMDjS2097lpihj7IvVD6Yw3bN/PSPwPw0CpdSYVHk/mH3f2K0SG+VkUnIMVXUaBP6mQaCUGhNfU43VZwSeYyRQqVcX+50GgVJqTCpdLcRHOclMjLb8WEUZ8VS6WvAMOlT+okGglBqTyroWCjPiERHLj1WUHk9TRzeu5g7LjxVONAiUUmNSVddMocX9Az5FGd6RQ9ph7FcaBEqpUWvv6qHmSBtF6db3D4COHLKKBoFSatT21rdiTGA6igFyUmKJjnBQpdcS+JUGgVJq1CoDNHTUx+EQCtPj9YzAzzQIlFKj5hs6WpAeF7BjFmXEU6nXEviVBoFSatSqXC1kJkaTGBMZsGMWpSccW/9A+YcGgVJq1CrrWo514AZKYXo8PW7D3vrWgB53PNMgUEqNWlVdS8A6in18x9OpJvxHg0ApNSpHWzupb+kMWEexz0fXEujIIX/RIFBKjYqvwzbQTUPJsZGkJ0TpyCE/0iBQSo3KsaGjAW4aAk+Hsa5L4D8aBEqpUamqaybCIeSlBm7oqI9eS+BfGgRKqVGpqmshPzWOSGfgP0aKMuI53NJJQ1tXwI89HmkQKKVGpdIV+KGjPr7j6sgh/9AgUEqNmNttqLLhGgKfj4aQaj+BP1gaBCKyTER2iEiFiNzcz/P5IvKWiKwXkU0ico6V9Sil/GN/Qxsd3e5jQzkDLS81Dod8tEymGhvLgkBEnMAfgbOB2cBlIjK7z2Y/BJ4wxiwALgXusaoepZT/VNk0dNQnOsJJXmqczjnkJ1aeESwGKowxlcaYTuBxYHmfbQyQ5L2dDOy3sB6llJ/4RuxMsWHoqE9herz2EfiJlUGQA1T3ul/jfay324ArRKQGWAHc0N+OROQ6ESkVkVKXy2VFrUqpEaiq86xTnBGAdYoH4gsCXb947OzuLL4MeNAYkwucAzwiIp+oyRhznzGmxBhTkpGREfAilVIfF8h1igdSlB5Pa2cPhxp1/eKxsjII9gF5ve7neh/r7RrgCQBjzCogBki3sCallB8Ecp3igfiOr1cYj52VQbAWmCYihSIShacz+Lk+2+wFTgcQkVl4gkDbfpQKYh3dPew70mZbR7FPoc5C6jeWBYExphu4HngF2IZndNBWEblDRM73bnYT8DUR2Qg8BlxttMFPqaBWXd+K20BhAFcl68/EpBhiIh06hNQPIqzcuTFmBZ5O4N6P3drrdhmw1MoalFL+5RsxZHfTkMMhFKTpspX+YHdnsVIqxBy7hiDN3qYh8FxhrE1DY6dBoJQakd2HW0iLjyI5LnDrFA+kMD2evfWtdPXo+sVjoUGglBqRSlcLBTZ3FPsUpifQ4zZU6/rFY6JBoJQaETsnm+tLZyH1Dw0CpdSwtXR0U9vUETRBMEWHkPqFBoFSatjsnmyur5S4KCbERbJLh5COybCCQET+KSLn9jf9g1IqfARbEIBvziG9ungshvvBfg/wJaBcRH4mIjMsrEkpFaR8QVAQBENHfQrTE7RpaIyGFQTGmNeNMZcDC4HdwOsislJEviIi9o8hU0oFxO66FiYlxxAb5bS7lGOKMuI51NhBS0e33aWErGE39YhIGnA1cC2wHvgdnmB4zZLKlFJBp7IueIaO+ujIobEbbh/BM8C7QBxwnjHmfGPMP4wxNwD2XmeulAoIYwyVruag6h+A3usXaxCM1nDnGvqzd96gY0Qk2hjTYYwpsaAupVSQOdLaRWN7d9AFga+/olJHDo3acJuG7urnsVX+LEQpFdx837iLbFyesj8xkU5yUmJ15NAYDHpGICLZeJaXjBWRBYBvOaIkPM1ESqkwEYwjhnx0/eKxGapp6Cw8HcS5wN29Hm8CbrGoJqVUEKqqa8bpEPJSg+87YGF6PM9u2IcxxtblM0PVoEFgjHkIeEhELjLGPB2gmpRSQWh3XSv5qXFEOoPvutLC9Hia2rs53NJJekK03eWEnKGahq4wxjwKFIjIjX2fN8bc3c+vKaXGocq6FgrSgu9sAD7qt6h0tWgQjMJQ0e5rDEwAEvv5UUqFAbfbsLuuxfZVyQZS5K1LO4xHZ6imoT95/7w9MOUopYLRoaZ22rp6ji0YH2xyJsQS6RRdtnKUhntB2S9EJElEIkXkDRFxicgVVhenlAoOx4aOBtk1BD5OhzA5LV4Xsh+l4fb6nGmMaQQ+h2euoanAf1tVlFIquBwbOhqkQQA6hHQshhsEviakc4EnjTENFtWjlApCVa4WoiMcTEyKsbuUARVlxLPncCs9bmN3KSFnuEHwgohsBxYBb4hIBtBuXVlKqWDiW57S4QjeMfpF6fF09rjZd6TN7lJCznCnob4ZOAkoMcZ0AS3A8qF+T0SWicgOEakQkZsH2OaLIlImIltF5O8jKV4pFRhVdS1BeUVxb74RTZU6cmjEhjvpHMBMPNcT9P6dhwfaWEScwB+BM4AaYK2IPGeMKeu1zTTg+8BSY8wREckcUfVKKct19bjZW9/K2XOz7S5lUL2noz5Vl84akWEFgYg8AkwBNgA93ocNgwQBsBioMMZUevfxOJ6ziLJe23wN+KMx5giAMaZ2RNUrpSy353AL3W7DlIzgvIbAJz0hisToCO0wHoXhnhGUALONMSPphckBqnvdrwGW9NlmOoCIvA84gduMMS/33ZGIXAdcB5Cfnz+CEpRSY1VR6/lgnZoZ3EEgIhRm6Mih0RhuZ/EWwIrzwghgGnAqcBnwZxFJ6buRMeY+Y0yJMaYkIyPDgjKUUgPZ5fK0uRcF+RkBeDqMdV2CkRvuGUE6UCYia4AO34PGmPMH+Z19QF6v+7nex3qrAVZ7O6CrRGQnnmBYO8y6lFIW2+VqJjsphoTokXQp2qMwPYFnN+ynvauHmMjgWVc52A33X/a2Uex7LTBNRArxBMClwJf6bPMsnjOBv4pIOp6mospRHEspZZFdtc1MyQzuEUM+vikwdh9uYWZ2ks3VhI7hDh99G88VxZHe22uBD4f4nW7geuAVYBvwhDFmq4jcISK+M4lXgMMiUga8Bfy3MebwqP4mSim/M8awy9XC1BBoFoKPpsDQqSZGZrijhr6Gp7M2Fc/ooRzgXuD0wX7Pu87xij6P3drrtgFu9P4opYJMbVMHzR3dTAnyjmIf3xQYOvncyAy3s/jbwFKgEcAYUw7omH+lxrldtZ6O4mAfOuqTEB1BZmK0jhwaoeEGQYcxptN3x3tRmU7oodQ45xsxFCpBAJ45hypdenXxSAw3CN4WkVvwLGJ/BvAk8Lx1ZSmlgkFFbTMJ0RFkJYXOql+F6Ql6RjBCww2CmwEXsBn4Op52/x9aVZRSKjjscrUwJSM+pBaEL0qP50hrF0daOofeWAHD7Cw2xrhF5FngWWOMy+KalFJBYpermROL0uwuY0SOzTl0uIUJ8VE2VxMaBj0jEI/bRKQO2AHs8K5Odutgv6eUCn3NHd0caGgPmRFDPr5rCXQI6fAN1TT0X3hGCx1vjEk1xqTimS9oqYj8l+XVKaVs4/sgnRKk6xQPJG9CHE6HHOvoVkMbKgi+DFxmjKnyPeCdTfQK4EorC1NK2avC1QQE/2RzfUVFOChIi6O8VoNguIYKgkhjTF3fB739BJHWlKSUCga7altwOoT81NA6IwCYnpVI+aEmu8sIGUMFwWDd7tolr9Q4Vl7bxOTUOKIihju4MHhMy0pkb30r7V09Q2+shhw1dJyINPbzuADBu4q1UmrMdh5qZmZ2ot1ljMr0rATcxjPqqXhSst3lBL1Bo94Y4zTGJPXzk2iM0aYhpcap9q4e9hxuYXpWaAbBtExP3eWHtJ9gOELvnE8pZbmK2mbchpANgsL0eCIcwk7tJxgWDQKl1Cf4PkBnZIfWiCGfqAgHBenx7NQzgmHRIFBKfcKOQ01EOR1MTgu9EUM+07MSqKjVM4Lh0CBQSn3CzoNNFGXEE+kM3Y+IaZmJ7NGRQ8MSuv/KSinL7DzUHLL9Az7TsxIxxtPfoQanQaCU+pim9i72HW1jRogOHfWZnuXp3yjX5qEhaRAopT7GNzVDqJ8RTE7zjRzSM4KhaBAopT5m50HviKEQD4KoCAeF6fF6LcEwaBAopT5m56FmYiOd5E6ItbuUMZuelahNQ8OgQaCU+pgdhxqZlpWAwxE6q5INZLp3zqGWjm67SwlqGgRKqWOMMZTtb2T2xCS7S/GL2ZOSMMZzXYQamKVBICLLRGSHiFSIyM2DbHeRiBgRKbGyHqXU4A40tHOktYvZk8ZHEMya6OnnKNvf39yZyseyIBARJ/BH4GxgNnCZiMzuZ7tE4DvAaqtqUUoNj+8Ds3icBEFOSixJMRFsO6BBMBgrzwgWAxXGmEpjTCfwOLC8n+3uBH4OtFtYi1JqGLbub0QEZmaPjyAQEWZNTKJMg2BQVgZBDlDd636N97FjRGQhkGeMeXGwHYnIdSJSKiKlLpfL/5UqpQAoO9BAYVo88dFDLVUSOmZNTGLHwSbcbmN3KUHLts5iEXEAdwM3DbWtMeY+Y0yJMaYkIyPD+uKUClNb9zeOm/4Bn9mTkmjt7GFPfavdpQQtK4NgH5DX636u9zGfRGAO8G8R2Q2cADynHcZK2aOhrYuaI23jLwi8I6C0w3hgVgbBWmCaiBSKSBRwKfCc70ljTIMxJt0YU2CMKQA+AM43xpRaWJNSagAfdRSPr6Udp2Ym4HSIdhgPwrIgMMZ0A9cDrwDbgCeMMVtF5A4ROd+q4yqlRsfXoTperiHwiYl0MjUjQYNgEJb2CBljVgAr+jx26wDbnmplLUqpwW3d30BmYjQZidF2l+J3syYmsrqq3u4ygpZeWayUAjxNQ+Otf8Bn9qQkz8VyLZ12lxKUNAiUUrR2drPzUBPzcsZX/4DPHO/fa9O+BpsrCU4aBEoptuxrxG1gfn6K3aVYYm5OMiKwqfqo3aUEJQ0CpRQbqo8AcFzu+AyCxJhIitLj2VijZwT90SBQSrGxuoG81FjSEsZfR7HPcbkpbKw5ijF6hXFfGgRKKTZUHx23ZwM+83KTcTV1cLBRpzXrS4NAqTBX29TOvqNtzM8b50Hg/fttrNbmob40CJQKc74PxvEeBLMnJhHhEDbVaIdxX+NnikE1Zt09bl7eepB/bdjP+r1HOdraSUpcFPPzkjnvuEmcO3ciEU797jDebKw+itMhx4ZYjlcxkU5mTkxkowbBJ2gQKADW7z3C957aRHltMzkpsXxmRgbpidHUNXWwctdhXt+2gd+9Xs7PLprH4sJUu8tVfvTh3iPMzE4kJtJpdymWm5ebwvMb9+N2m3GxJrO/aBAo7n+vih+/WEZWUgz/d/lCzirO/tibxO02vLbtEHe9WMYl963i+2fP5GufKkJE30ihrrPbzYd7j3DZ4ny7SwmI43KT+fvqvVQdbmFKRoLd5QQNDYIwZozhJyu28ed3qzirOItfXnwcSTGRn9jO4RDOKs7m5KnpfO+pTfxkxXb2HWnjtvOLNQxC3OZ9DbR3uVkSJmd5C/InAPDhniMaBL1og28Y+83r5fz53SquPHEy91y+qN8Q6C0+OoI/XLaAa08u5KFVe/jJim06JjvErd3tmYjt+ILwCIKpGQmkxEUe+3srDz0jCFOPrNrN798o5+JFudw+gm/2Dofwg3Nn0dnj5s/vVpGdHMs1JxdaW6yyzJqqeqZkxI/rC8l6cziEkskTKN19xO5SgoqeEYShNVX13PZ8GafPzOSnF84dcfOOiHDbecWcOTuLn6zYxvsVdRZVqqzU4zas3V3P4sI0u0sJqOMLUqmsa8HV1GF3KUFDgyDM1Da28+2/f0h+ahy/uXT+qIeDOhzC3ZfMZ0pGPN/++4fsP9rm50qV1bYfbKSpvTts+gd8SrzNYOv2aPOQjwZBGDHGcNOTG2lu7+beK4buExhKQnQEf/pyCZ3dbm56YiNut/YXhJI13oVawm048NycZKIjHKyp0uYhHw2CMPLo6r28W17HD86dxYzsRL/sszA9ntvOK2ZV5WH+/G6lX/apAuO98jryU+OYlBJrdykBFRXhYH5eCqV6RnCMBkGY2F3Xwk9e3MYp0zO4fIl/x4xfXJLLsuJsfvXqDl0XNkR0drtZVXmYU6an212KLRYXprJ1fyPNHd12lxIUNAjCgNtt+O6TG4l0Cr+4aJ7fx/6LCD+9cC5JMZHc/PQmerSJKOit23OE1s4eTpmWYXcptjixKI0et+GDXYftLiUoaBCEgcfXVlO65wi3nldMdnKMJceYEB/Fj84vZmNNAw+u3G3JMZT/vFPuIsIhnDglvEYM+SwqmEBMpIP3dMQboEEw7tU1d/Dzl7dzQlEqFy3MsfRY582byGkzM/nVKzuorm+19FhqbN4td7EwfwKJYxwwEKqiI5wsLkzTIPCyNAhEZJmI7BCRChG5uZ/nbxSRMhHZJCJviMhkK+sJRz97aTstHd3cdcEcy6eDEBHuvGAODoEfPLtFrzoOUrWN7WzZ1xi2/QM+n5qaTkVtMwcadOizZUEgIk7gj8DZwGzgMhGZ3Wez9UCJMWYe8BTwC6vqCUdrqup5al0NXzuliKmZ/hklNJSclFi+e9YM3tnp4vlNBwJyTDUyr5YdAuCM2dk2V2KvpVM9QfheuZ4VWHlGsBioMMZUGmM6gceB5b03MMa8ZYzxtSF8AORaWE9Y6epx88NnN5OTEst/nDYtoMe+8sQC5uUmc8fzZTS0dQX02Gpor2w9SEFaHNOzwnvStZnZiaQnRGnzENYGQQ5Q3et+jfexgVwDvNTfEyJynYiUikipy+XyY4nj1/3vVbHzUDO3n19MbFRg55l3OoSffH4u9S0d/OLl7QE9thpcQ1sXq3Yd5qzi7LCfOdbhEE6ems675XVhP9ItKDqLReQKoAT4ZX/PG2PuM8aUGGNKMjLCc7jbSOw72sbvXi/ns7Oy+OzsLFtqmJOTzNUnFfK31XtZt2d8X8HZ0tHNjoNNlO6uZ1ONZ2W3YPXW9lq63YYzi8O7Wcjn9FlZ1Ld08uHe8f1/dChWzj66D8jrdT/X+9jHiMhngR8AnzbG6CxQfnD7c1sBuO38vl0ygXXjmdN5acsBfvDMZp6/4WQix9Eyl66mDp4oreaVrQfZsq+Bvl8ocyfE8tlZWVxckkvxpOBZAvKFTfvJSopmwThfn3i4Tp2RQaRTeHXrwbCZirs/VgbBWmCaiBTiCYBLgS/13kBEFgB/ApYZY2otrCVsvLn9EK+WHeJ7y2aQOyHO1loSoiO47fxivv7IOu5/r4pvfHqKrfX4Q11zB799fSf/WFtNV49h0eQJXH/aNKZmJpASG0l7Vw+7D7ewpqqex9bs5cGVuz0L+iybwbxcez9865o7+PcOF9ecXKjLNHolxkRy0pR0Xi07xC3nzArb5jLLgsAY0y0i1wOvAE7gAWPMVhG5Ayg1xjyHpykoAXjS+w+w1xhzvlU1jXftXT386LmtTM1M4NqTi+wuB4CzirM5Y3YWv319J+fOnUheqr3hNFrGGJ4sreHOF8po7erhssV5fGVp4YCrXF13yhQaWrv4+5q93P9eJcv/+D5fWpzP98+ZRUK0PcuAPL9xP91uw4ULdUxGb2cWZ/GDZ7ZQXtvM9KzAjK4LNpaeqxtjVhhjphtjphhjfux97FZvCGCM+awxJssYM9/7oyEwBve8VUF1fRt3LC8mKiJ4mmFuP78Yhwi3/is0ry042trJNx5dx/ee3sScnGRe+c9TuOuCuUMudZgcF8k3T53Cm989latPKuCxNXv53O/fZVPN0QBV/nFPf1jDnJwkv004OF6cMcvTj/bq1oM2V2Kf4Pm0UGNSVdfCvW9XcsH8SZw0JbguFJqUEsuNZ0znrR0uXtoSWm+2itpmlv/xfd7cXsst58zkb9cuYWrmyIZdJsVE8qPzinn8uhPp7HZz4T0r+fvqvRZV3L8t+xrYsq+Ri/Rs4BMyk2JYmJ/CC2F83YsGwThgjOHWf20hOsLBLefOsrucfl19UgGzJyZx23NbaWwPjWsL3i138fl73qelo5vHrzuR606ZMqa29cWFqaz4zqdYOjWdW57ZzJ0vlAVs2OID71cRH+XkokUaBP1ZPj+H7Qeb2H4wPGfP1SAYB1ZsPsi75XXcdOZ0MhOtmVRurCKcDn564VxczR38+pUddpczpBc3HeArf11LTkosz357KYsmT/DLflPiorj/qhKuPqmA+9+r4msPl9Ji8VTItU3tPL9xPxeX5I15MaLx6nPzJhLhEJ5Z/4mBjWFBgyDENbR1cfvzW5k9MYkrTgjuqZqOy0vhyhMm8/AHe9hQbU87+XA8UVrNDWvkh/8AAA9qSURBVI99yIL8FJ74xol+H30V4XRw2/nF3HnBHP69o5ZL7ltFbWO7X4/R2yOr9tDtNlx9UoFlxwh1aQnRfHp6Bv9avz8sV9rTIAhxP36xjMMtnfz8onmjXn84kG46awaZidHc8s/NdPe47S7nEx58v4rvPbWJpVPTeeiriy39Bv3lEyZz/1XHU+lq4fP3rGTnoSa/H6O+pZO/vr+bZcXZFKTH+33/48kFC3I42NgellNOBP8nhxrQu+Uuniit4bpTipibGzwXLQ3G13FadqCRP79bZXc5H3PPvyu47fkyzirO4i9XlRAXZf0wz8/MzOSJr59IZ4+bi/5vJSt3+fdD6N63d9HS2c2NZ0z3637HozOLs0iNj+LRD/bYXUrAaRCEqJaObm5+ejNFGfF85/TATio3VmfPyebsOdn8+tUdtg2l7Ot3r5fzi5d3sHz+JP74pYVERwRufqY5Ock8862TyE6K4aoH1vDM+hq/7Leitpm/vl/FhQtymRam4+NHIjrCySXH5/H6tkPsPxpeU1NrEISoH6/Yxv6GNn75hXnERAZ2Urmx8i1tmZEYzX88tt7WdWONMfz61R385vWdXLQwl7u/ON+WJrbcCXE89c2TWDR5Av/1j4384Y3yMV1z4XYbfvjsZmIjndx89kw/Vjq+Xb4kHwMBH95rNw2CEPTylgP8ffVerjuliEWTQ3N+lJS4KH57yXz21rfadqGZMYafv7yDP7xZwSUlefzyC/Nw2jj1QnJsJA99dTGfX5DDr1/byc1Pb6ZrlP0of3qnkg8q6/n+ObPISIz2c6XjV+6EOD47K4tHV++xfDRXMNEgCDEHGtr4n6c3My83mZvOmGF3OWOypCiNG06bxj8/3MfDqwLbLmuM4ccvbuPet3dx+ZJ8fnrh3KCYfyc6wsndXzyOG06byj9Kq7nmoVKOtIxsNtO3d7r41as7OHfuRC49Pm/oX1Af861Tp3C0tYu/rQ6fvgINghDS3ePmPx/fQFePm99fuiCoppEYre+cPo3PzsrkjhfKeD9AozV63IZbntnCX96r4uqTCrjrgjlBEQI+IsJNZ87g5xfNZWVFHWf+9h1e964qNpR3y118/ZFSZmQl8rOL5obtJGpjsSB/Ap+als5971TR3tVjdzkBEfqfJGHkxyu2sbqqnrsumDNuhgI6HMJvLpnPlIx4vvW3D9lx0P9DKHtr7+rhm4+u47E1e/nWqVP40Xmzg/bD8pLj8/nX9UtJi4/i2odL+eqDa9myr6Hfbdu7evj9G+Vc9cAaJqfG8/A1i8N2YXp/uP4zU6lr7uCB94NrZJtVJNQmASspKTGlpaV2lxFwT5ZW899PbeIrSwv40XnFdpfjd9X1rXzh3pX0uOGJr59A0RATuo3G4eYOvvHoOkr3HOFHn5vN1UsL/X4MK3R2u7n/vSrufXsXDW1dFE9K4tQZGRSkxdPjNmw/2MSLmw/gaurgc/Mm8rOL5tk2w+l4cu1Da/mgsp63vnvquOhnEZF1xpiSfp/TIAh+q3Yd5qoH1lBSMIGHv7o4JC4cG42K2mYu+dMqoiIcPHLNyCd3G8zmmga+8eg6zxQXFx/HecdN8tu+A6WxvYsnS2t4fuN+Nu9rODZPUVSEg09Pz+ArSwuCbsLBUFbpaubM37zDRQtz+fkX5tldzphpEISwLfsauPS+D8hOjuHJr5/IhPgou0uyVNn+Rq58YDVdPYb7vryIJUVpY9qfMYa/rd7LHS+UkR4fxb1fXmT7AjH+0N7Vg6vJs6DfxOSYcfvlwG4/WbGN+96p5NFrlnDytNAO2cGCQP/3BLGdh5q46oE1JMdG8sg1i8d9CADMnpTEP7+5lLSEKC7/y2ru+XfFqGforDnSypUPrOGHz25hSWEqz99w8rgIAYCYSCd5qXHkpcZpCFjoxjOmU5QRz/ee2hgys+aOhv4PClIbq4/yxT+twuEQHr5mMROTY+0uKWDy0+J45ptLOas4m1+8vIOL713Juj31w/79+pZOfrpiG6f9+m3W7TnCXRfM4eGvLiYtIfTbeVVgxUQ6+fXFx3GoqYMb/7Fx3E5Ip01DQejfO2r59t8+JDUhikevWcLktPExQmikjDE8s34fP31pO66mDpZOTeOLJXl8aloGqX3Ojlo6ulm16zArthzghU0H6Opx8/kFOdx05gxyUsInRJU1/vp+Fbc/X8YNp03lpjND8/qdwZqGdGhBEDHGcM+/d/GrV3cwMzuJv159PNnJwbm+QCCICBcuzGXZnGweXLmbv32wl+88vgGAnJRYMpM83/APN3dSc6QVt4H4KCeXlORx5YmTdX4d5TdXn1TAtgON/OHNCpJjI7n2U8GxJri/6BlBkKg50sr3/7mZd8vrWD5/Ej+7cB6xUaE1h5DV3G7D+uojfFBZT0VtM66mDkQ8UzMUpcezpCiNkoIJAZ0wToWP7h4333l8Ay9uPsCNZ0znhtOmBu01KP3RM4Ig1tHdwyOr9vCb13ZigDsvmMMVS/JD6j9YoDgcwqLJqSE7v5IKbRFOB7+9dD7REQ7ufm0n5bXN3HXBHJJjQ//CPQ0Cm7R39fDs+n384c0K9h1t49PTM7jrgjnkpfp3NSyllP9EOh38+ovHMSUzgbtf28naqnpuX17MmbOzQvrLmzYNBZAxhs37Gnhh0wGeLK3mSGsXc3OS+Z9lM0N+jLJS4WZj9VG+++RGymubmZ+XwjdPncJpMzOJDNLhvLZdUCYiy4DfAU7gL8aYn/V5Php4GFgEHAYuMcbsHmyfoRQEbrdh39E2SvfUs6aqnnfL66g50kaEQzhtZiZfWVrICUWpIf1NQqlw1tXj5ul1Nfz+jXL2N7STnhDNuXOzOWV6BkuK0oJqqg9bgkBEnMBO4AygBlgLXGaMKeu1zbeAecaYb4jIpcDnjTGXDLZfu4Ogx21o6+qhtbObts4e2rp6aGjtwtXcgavJ87P/aBsVrmZ21bbQ5p29MCkmgsWFaZxZnMWZs7NIiRv/F4cpFS66e9y8vdPFE6XVvLOz7tj7viAtjlkTkyhIj2dicgwTk2PJSIwmITqCxJgIEqIjiItyBuTLoF2dxYuBCmNMpbeIx4HlQFmvbZYDt3lvPwX8r4iIsSCd3t7p4s4XynAbgzHgNsbz4/Y02biPPQbQ6777o+273IbO7sEXColwCFlJMRRlxHPZ4jSmZiawID+FGVmJQTXVsVLKfyKcDk6flcXps7Lo6O6hdPcRPtxzhG0HGynb38jr2w7R1TPwx1qkU4hwOIhwChEOIcLpINIhOJ2CQwQBHCJctjifr53i/6GrVgZBDlDd634NsGSgbYwx3SLSAKQBH5uYXkSuA64DyM/PH1UxCdERzMhKRMTzgjq8f8rHbvOx+45j9z23nQ4hNspJXJST2KgI4iI9txNjIslMiiYjIZrk2Ej9wFcqjEVHOFk6NZ2lUz/q93O7DXUtHRxsaKeuuYOm9m6aO7ppbu+mpaObLrehu8dNt9vQ3WPodrvp6jH0uM2xL6oGjl0742/B04A1CGPMfcB94GkaGs0+Fk2ewKLJE/xal1JKDYfDIWQmxpCZGJwXiFrZvb0P6L1OXq73sX63EZEIIBlPp7FSSqkAsTII1gLTRKRQRKKAS4Hn+mzzHHCV9/YXgDet6B9QSik1MMuahrxt/tcDr+AZPvqAMWariNwBlBpjngPuBx4RkQqgHk9YKKWUCiBL+wiMMSuAFX0eu7XX7XbgYitrUEopNbjgvAROKaVUwGgQKKVUmNMgUEqpMKdBoJRSYS7kZh8VERewZ5S/nk6fq5aDRLDWBcFbm9Y1MlrXyIzHuiYbYzL6eyLkgmAsRKR0oEmX7BSsdUHw1qZ1jYzWNTLhVpc2DSmlVJjTIFBKqTAXbkFwn90FDCBY64LgrU3rGhmta2TCqq6w6iNQSin1SeF2RqCUUqoPDQKllApz4zIIRGSZiOwQkQoRubmf56NF5B/e51eLSEGQ1HW1iLhEZIP359oA1fWAiNSKyJYBnhcR+b237k0isjBI6jpVRBp6vV639redn2vKE5G3RKRMRLaKyHf62Sbgr9cw6wr46+U9boyIrBGRjd7abu9nm4C/J4dZl13vSaeIrBeRF/p5zv+vlTFmXP3gmfJ6F1AERAEbgdl9tvkWcK/39qXAP4KkrquB/7XhNTsFWAhsGeD5c4CXAAFOAFYHSV2nAi8E+LWaCCz03k4Edvbz7xjw12uYdQX89fIeV4AE7+1IYDVwQp9t7HhPDqcuu96TNwJ/7+/fy4rXajyeESwGKowxlcaYTuBxYHmfbZYDD3lvPwWcLiJWLzQ8nLpsYYx5B896EANZDjxsPD4AUkRkYhDUFXDGmAPGmA+9t5uAbXjW3u4t4K/XMOuyhfd1aPbejfT+9B2lEvD35DDrCjgRyQXOBf4ywCZ+f63GYxDkANW97tfwyTfEsW2MMd1AA5AWBHUBXORtTnhKRPL6ed4Ow63dDid6T+1fEpHiQB7Ye0q+AM83yd5sfb0GqQtser28TR0bgFrgNWPMgK9ZAN+Tw6kLAv+e/C3wPcA9wPN+f63GYxCEsueBAmPMPOA1Pkp91b8P8cyfchzwB+DZQB1YRBKAp4H/NMY0Buq4QxmiLtteL2NMjzFmPp61yxeLyJxAHXsww6groO9JEfkcUGuMWWflcfoaj0GwD+id2rnex/rdRkQigGTgsN11GWMOG2M6vHf/AiyyuKbhGs5rGnDGmEbfqb3xrIYXKSLpVh9XRCLxfNj+zRjzz342seX1Gqouu16vPjUcBd4ClvV5yo735JB12fCeXAqcLyK78TQfnyYij/bZxu+v1XgMgrXANBEpFJEoPJ0pz/XZ5jngKu/tLwBvGm/Pi5119WlHPh9PO28weA640jsa5gSgwRhzwO6iRCTb1zYqIovx/H+29MPDe7z7gW3GmLsH2Czgr9dw6rLj9fIeK0NEUry3Y4EzgO19Ngv4e3I4dQX6PWmM+b4xJtcYU4DnM+JNY8wVfTbz+2tl6ZrFdjDGdIvI9cAreEbqPGCM2SoidwClxpjn8LxhHhGRCjydkZcGSV3/ISLnA93euq62ui4AEXkMz4iSdBGpAX6Ep+MMY8y9eNadPgeoAFqBrwRJXV8Aviki3UAbcGkAAn0p8GVgs7dtGeAWIL9XXXa8XsOpy47XCzwjmh4SESee8HnCGPOC3e/JYdZly3uyL6tfK51iQimlwtx4bBpSSik1AhoESikV5jQIlFIqzGkQKKVUmNMgUEqpMKdBoJRSYU6DQCmlwtz/AwuavXK3D5yIAAAAAElFTkSuQmCC\n",
+            "text/plain": [
+              "<Figure size 432x288 with 1 Axes>"
+            ]
+          },
+          "metadata": {
+            "tags": [],
+            "needs_background": "light"
+          }
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "pOc7snseiUGo",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 302
+        },
+        "outputId": "07721ad0-3646-4ca3-ac2f-0db84b0669b6"
+      },
+      "source": [
+        "PTabs.plot(kind='bar');"
+      ],
+      "execution_count": 155,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "image/png": "iVBORw0KGgoAAAANSUhEUgAAAXUAAAEdCAYAAADzWvf/AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4yLjIsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy+WH4yJAAAgAElEQVR4nO2dedhVZbn/P7eAoqGYiGm+IIiSTGaAKImJY+hxxk6YDZZpZVS/tFN26uSQ55R1Ms0yD+VQnRNqamqJaSY2UCqjgiCKBAJOiCMyCd6/P+5nw2Kz1n73C/vlheX3c13r2nut+1nPsIbveoZ7PcvcHSGEEOVgm7bOgBBCiMYhURdCiBIhURdCiBIhURdCiBIhURdCiBIhURdCiBLRvq0S3nXXXb1Hjx5tlbwQQmyVTJ48+UV371pkbzNR79GjB5MmTWqr5IUQYqvEzObXsqv7RQghSoREXQghSoREXQghSkSb9akLIURr8uabb7Jw4UJWrFjR1lnZKDp27EhTUxMdOnRo0X4SdSFEKVm4cCE77rgjPXr0wMzaOjstwt1ZsmQJCxcupGfPni3at9nuFzO7zsxeMLMZBXYzsx+Z2Rwze9TMBrYoB0II0QqsWLGCLl26bHWCDmBmdOnSZaNaGfX0qd8AjKhhPxbYNy3nAD9tcS6EEKIV2BoFvcLG5r1ZUXf3vwAv1QhyEvBLDx4EdjazPTYqN0II0Yo899xzjBo1il69ejFo0CCOO+44xowZw/HHH99meRo+fHhD39lphPfLnsCCzPrCtG0DzOwcM5tkZpMWL17cgKSFEKI+3J1TTjmF4cOH89RTTzF58mS+853v8Pzzz7d11pplwC8G1B12s7o0uvsYdx/s7oO7di18y1UIIRrO+PHj6dChA5/97GfXbnvve9/LoYceytKlSznttNPYb7/9OOOMM6h8Ee6SSy7hwAMPpH///pxzzjlrtw8fPpyvfe1rDBkyhN69e/PXv/4VgBtuuIFTTz2VESNGsO+++/LVr351bVr33nsvQ4cOZeDAgXzoQx9i6dKlrVLORoj6IqBbZr0pbRNCiC2GGTNmMGjQoFzb1KlTueKKK5g5cyZz585lwoQJAIwePZqJEycyY8YMli9fzu9///u1+6xevZqHH36YK664gosvvnjt9mnTpnHTTTcxffp0brrpJhYsWMCLL77IpZdeyn333ceUKVMYPHgwl19+eauUsxEujXcCo83sRuAg4FV3f7YB8QohxGZhyJAhNDU1AXDAAQcwb948hg0bxvjx4/ne977HsmXLeOmll+jXrx8nnHACAKeeeioAgwYNYt68eWvjOvLII+ncuTMAffv2Zf78+bzyyivMnDmTQw45BIBVq1YxdOjQVilLs6JuZmOB4cCuZrYQuBDoAODu1wDjgOOAOcAy4JOtklMhhNgE+vXrxy233JJr22677db+b9euHatXr2bFihWce+65TJo0iW7dunHRRRet52JY2acSvlZc7s7RRx/N2LFjG12sDajH++V0d9/D3Tu4e5O7X+vu1yRBJ3m9fN7de7n7AHfX1ItCiC2OI444gpUrVzJmzJi12x599NG1/eHVVAR81113ZenSpYUPhHo4+OCDmTBhAnPmzAHgjTfe4Iknntjo+GqhuV+EEG8LzIzf/va33HffffTq1Yt+/frx9a9/nd133z03/M4778zZZ59N//79+eAHP8iBBx640Wl37dqVG264gdNPP53999+foUOH8vjjj290fLWwymju5mbw4MGu+dSFEK3FrFmz6NOnT1tnY5OolGHALwYw/RPTATCzye4+uGgf1dSFEKJESNSFEKJESNSFEKJESNSFEKJESNSFEKJESNSFEKJESNSFEKKV+NSnPsVuu+1G//79N1ua+pydEOJtQY8L7mpofPO++y/NhjnzzDMZPXo0H//4xxuadi1UUxdCiFbiAx/4ALvssstmTVOiLoQQJUKiLoQQJUKiLoQQJUKiLoQQJUKiLoQQrcTpp5/O0KFDmT17Nk1NTVx77bWtnqZcGoUQbwvqcUFsNJvjS0fVqKYuhBAlQqIuhBAlQqIuhBAlQqIuhBAlQqIuhBAlQqIuhBAlQqIuhBCtxIIFCzj88MPp27cv/fr148orr2z1NOWnLoR4e3BR5wbH92qzQdq3b88PfvADBg4cyOuvv86gQYM4+uij6du3b2PzkkE1dSGEaCX22GMPBg4cCMCOO+5Inz59WLRoUaumKVEXQojNwLx585g6dSoHHXRQq6YjURdCiFZm6dKljBw5kiuuuIKddtqpVdOSqAshRCvy5ptvMnLkSM444wxOPfXUVk9Poi6EEK2Eu3PWWWfRp08fzjvvvM2SpkRdCCFaiQkTJvCrX/2K+++/nwMO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\n",
+            "text/plain": [
+              "<Figure size 432x288 with 1 Axes>"
+            ]
+          },
+          "metadata": {
+            "tags": [],
+            "needs_background": "light"
+          }
+        }
+      ]
+    }
+  ]
+}
