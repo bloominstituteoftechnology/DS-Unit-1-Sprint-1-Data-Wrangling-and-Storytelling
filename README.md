@@ -2,7 +2,7 @@
 
 ## Sprint 1: Data Wrangling and Storytelling
 
-In the repository, you will find Warm-up Activities, Guided Projects (lectures) and Module Projects (assignment) for each module.
+In the repository, you will find Warm-up Activities, Guided Projects (lectures) and Module Projects (assignment) for each module.  There is also a study guide to help you prepare for the Sprint Challenge.
 
 ### Import note about autograding
 
