@@ -1,4 +1,4 @@
-# Welcome to Lambda School Data Science - Unit 1!
+# Welcome to Data Science - Unit 1!
 
 ## Sprint 1: Data Wrangling and Storytelling
 
